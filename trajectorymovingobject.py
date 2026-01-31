@@ -7,14 +7,7 @@ import random
 class TrajectoryMovingObject(MoveableObject):
     """
     A gameobject that moves on a trajectory
+    todo: this is still used for status modifiers
     """
     def __init__(self, x, y, speed, img):
-        MoveableObject.__init__(self, x, y, speed, img)
-        self.subscribe(EVT_ACT, TrajectoryMovementBehavior(random.randrange(100, 260)).act)
-
-    def move(self):
-        self.notify(EVT_ACT, sprite=self)
-
-    def update(self):
-        super().update()
-        self.move()
+        MoveableObject.__init__(self, x, y, speed, img, [TrajectoryMovementBehavior(random.randrange(100, 260), self)])

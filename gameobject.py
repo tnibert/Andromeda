@@ -6,7 +6,7 @@ class GameObject(Observable):
     """
     A renderable object in the game
     """
-    def __init__(self, x, y, img, layer=GAMEOBJ_LAYER):
+    def __init__(self, x, y, img, behaviors=None, layer=GAMEOBJ_LAYER):
         Observable.__init__(self)
 
         self.x = x
@@ -19,8 +19,14 @@ class GameObject(Observable):
         # allows for movement speed independent of frame rate
         self.frame_tick = 0
 
+        if behaviors is None:
+            self.behaviors = []
+        else:
+            self.behaviors = behaviors
+
     def update(self):
-        pass
+        for behavior in self.behaviors:
+            behavior.act()
 
     def render(self, screen):
         screen.blit(self.image, (self.x, self.y))

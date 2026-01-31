@@ -2,6 +2,7 @@ from moveableobject import MoveableObject
 from bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
 from statusmodifiers import StatusModifier, TimeableStatmod
+from behaviors.explosion import ExplodeBehavior
 from loadstaticres import bulletimg
 from boss import Boss
 from endgamesignal import EndLevel
@@ -15,7 +16,12 @@ PLAYER_RESPAWN_DELAY = 3
 
 class Player(MoveableObject):
     def __init__(self, img, eventqueue):
-        MoveableObject.__init__(self, SCREENW / 2 - img.get_width()/2, SCREENH - img.get_height() - 5, PLAYERSPEED, img)
+        explosion_behavior = ExplodeBehavior(self)
+
+        MoveableObject.__init__(self, SCREENW / 2 - img.get_width()/2, SCREENH - img.get_height() - 5, PLAYERSPEED, img, [explosion_behavior])
+
+        self.subscribe("start_explosion", explosion_behavior.start_exploding)
+
         self.health = PLAYERHEALTH
         self.spawnX = self.x
         self.spawnY = self.y
@@ -32,13 +38,16 @@ class Player(MoveableObject):
         self.eventqueue = eventqueue
         self.statmods = []
 
-        self.respawn_timer = Timer()
-        self.respawn_timer.subscribe("timeout", self.respawn)
+        self.dying = False
+
+        # timer for respawn delay after explosion
+        #self.respawn_timer = Timer()
+        #self.respawn_timer.subscribe("timeout", self.respawn)
 
     def update(self):
         super().update()
-        if self.respawn_timer.is_timing():
-            self.respawn_timer.tick()
+        #if self.respawn_timer.is_timing():
+        #    self.respawn_timer.tick()
 
         # handle user input
         while not self.eventqueue.empty():
@@ -113,9 +122,11 @@ class Player(MoveableObject):
         self.godown = False
 
     def die(self):
-        self.health -= 1
-        self.start_exploding()
-        self.notify("alterhealth", value=-1)
+        if not self.dying:
+            self.dying = True
+            self.health -= 1
+            self.notify("start_explosion")
+            self.notify("alterhealth", value=-1)
 
     def oneup(self):
         self.health += 1
@@ -126,6 +137,7 @@ class Player(MoveableObject):
             self.speed = 0
             raise EndLevel({"state": "failure"})
         else:
+            self.dying = False
             self.x = self.spawnX
             self.y = self.spawnY
             self.speed = PLAYERSPEED
@@ -133,11 +145,8 @@ class Player(MoveableObject):
             self.bamfmode = False
             self.notify("player_respawn")
 
-    def update_explosion(self, event):
-        if super().update_explosion(event):
-            self.x = OFF_SCREEN
-            self.y = OFF_SCREEN
-            self.respawn_timer.startwatch(PLAYER_RESPAWN_DELAY)
+    #def explosion_finish(self, event):
+    #    self.respawn_timer.startwatch(PLAYER_RESPAWN_DELAY)
 
     def on_collide(self, event):
         if event.kwargs.get("who") == self:
@@ -146,11 +155,11 @@ class Player(MoveableObject):
                 if isinstance(event.source, TimeableStatmod):
                     event.source.subscribe("timeout", self.receive_signals)
                     self.statmods.append(event.source)
-            elif "Enemy" in str(event.source) and not self.exploding:
+            elif "Enemy" in str(event.source):
                 self.die()
-            elif isinstance(event.source, Boss) and not self.exploding:
+            elif isinstance(event.source, Boss):
                 self.die()
-            elif isinstance(event.source, Bullet) and not self.exploding:
+            elif isinstance(event.source, Bullet):
                 if event.source.origin is not self:
                     self.die()
 
