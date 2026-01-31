@@ -1,3 +1,9 @@
-pygame==1.9.4
-Nuitka==0.6.7
-pytest==5.4.1
+iniconfig==2.3.0
+Nuitka==2.8.10
+ordered-set==4.1.0
+packaging==26.0
+pluggy==1.6.0
+pygame==2.6.1
+Pygments==2.19.2
+pytest==9.0.2
+zstandard==0.25.0
