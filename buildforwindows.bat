@@ -10,23 +10,23 @@ set CC=C:\mingw64\mingw64\bin\gcc.exe
 set PYTHON=C:\Users\Tim\AppData\Local\Programs\Python\Python36\python.exe
 
 rem --windows-disable-console will hide errors unfortunately
-call %PYTHON% -m nuitka --show-progress --windows-disable-console --follow-imports --standalone killthealiens.py
+call %PYTHON% -m nuitka --show-progress --windows-disable-console --follow-imports --standalone andromeda.py
 
 rem copy file resources to build directory
-cd killthealiens.dist
+cd andromeda.dist
 mkdir assets
 cd ..
-robocopy assets\ killthealiens.dist\assets\ /MIR
+robocopy assets\ andromeda.dist\assets\ /MIR
 
-ren killthealiens.dist killthealiens-windows
+ren andromeda.dist andromeda-windows
 
 rem create zip file of build
 mkdir winbuild
-move killthealiens-windows winbuild
+move andromeda-windows winbuild
 copy README-Windows.txt winbuild
-powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('winbuild', 'killthealiens.zip'); }"
+powershell.exe -nologo -noprofile -command "& { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('winbuild', 'andromeda.zip'); }"
 
 rem clean up
 set PATH=%OLDPATH%
 rem rmdir winbuild /S /Q
-rmdir killthealiens.build /S /Q
+rmdir andromeda.build /S /Q

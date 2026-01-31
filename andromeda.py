@@ -21,12 +21,14 @@ from splashpage import SplashPage
 from hiscorescreen import HiScoreScreen
 import sys
 
+TITLE = "Andromeda"
+
 # queues for input events
 input_queue = Queue()
 
 # set up window
 screen = pygame.display.set_mode((SCREENW, SCREENH), pygame.DOUBLEBUF)
-pygame.display.set_caption("KILL THE ALIENS")
+pygame.display.set_caption(TITLE)
 
 # objects which will be shared between levels
 shared_objects = {
@@ -37,7 +39,7 @@ shared_objects = {
 
 shared_objects["ship"].subscribe("alterhealth", shared_objects["health_label"].update_value)
 
-# list of levels (including splash pages
+# list of levels (including splash pages)
 levels = [
     SplashPage(Scene(screen), input_queue, introscreen, pygame.K_RETURN)
 ]

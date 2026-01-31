@@ -1,18 +1,10 @@
-Kill The Aliens
+Andromeda
 
-An arcade style space shooter.
+A bullet hell engine.
 Enjoy :)
 
 Code released under Mozilla Public License by Iron Lotus Studios.
-The latest binary builds are available at www.ironlotuscomputer.com.au/kill-the-aliens.
-
-
-** Dependencies **
-
-Python 3 (tested with 3.6)
-pygame
-nuitka (to build binary)
-pytest (to run unit tests)
+The latest binary builds are available at www.ironlotussoftware.com/kill-the-aliens.
 
 
 ** Controls **
@@ -32,14 +24,14 @@ $ pip3 install -r requirements.txt
 ** To run **
 
 To run from source:
-$ git clone https://github.com/tnibert/Kill-The-Aliens/
-$ cd Kill-The-Aliens
-$ python3 killthealiens.py
+$ git clone https://github.com/tnibert/andromeda/
+$ cd andromeda
+$ python3 andromeda.py
 
 To run from binary:
-$ unzip killthealiens-linux.zip
-$ cd killthealiens-linux
-$ ./killthealiens
+$ unzip andromeda-linux.zip
+$ cd andromeda-linux
+$ ./andromeda
 
 
 ** To compile **
