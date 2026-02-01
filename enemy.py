@@ -17,6 +17,7 @@ class Enemy(MoveableObject):
         self.subscribe("start_explosion", explosion_behavior.start_exploding)
         self.exit_stage = False
         self.dying = False
+        self.orig_image = self.image
 
     def update(self):
         super().update()

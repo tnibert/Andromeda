@@ -40,6 +40,7 @@ class Player(MoveableObject):
         self.statmods = []
 
         self.dying = False
+        self.orig_image = self.image
 
         # timer for respawn delay after explosion
         #self.respawn_timer = Timer()

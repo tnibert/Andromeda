@@ -4,4 +4,3 @@ from gameobject import GameObject
 class MoveableObject(GameObject):
     def __init__(self, x, y, img, behaviors=None):
         GameObject.__init__(self, x, y, img, behaviors)
-        self.orig_image = self.image
