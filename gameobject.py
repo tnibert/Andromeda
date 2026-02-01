@@ -6,7 +6,7 @@ class GameObject(Observable):
     """
     A renderable object in the game
     """
-    def __init__(self, x, y, img, behaviors=None, layer=GAMEOBJ_LAYER):
+    def __init__(self, x, y, img, behaviors=None, properties=None, layer=GAMEOBJ_LAYER):
         Observable.__init__(self)
 
         self.x = x
@@ -23,6 +23,11 @@ class GameObject(Observable):
             self.behaviors = []
         else:
             self.behaviors = behaviors
+
+        if properties is None:
+            self.properties = []
+        else:
+            self.properties = properties
 
     def update(self):
         for behavior in self.behaviors:
