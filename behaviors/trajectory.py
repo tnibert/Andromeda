@@ -3,10 +3,11 @@ import math
 import random
 
 class TrajectoryMovementBehavior:
-    def __init__(self, angle: int, target):
+    def __init__(self, angle: int, speed, target):
         # angle randomly ranges from 100 degrees to 260, 0 degrees is vertical axis
         self.degreeangle = angle
         self.target = target
+        self.speed = speed
 
     def act(self):
         # screen edge checking
@@ -16,5 +17,5 @@ class TrajectoryMovementBehavior:
         elif (self.target.x < 0 and self.degreeangle < 180) or random.randrange(0, 2000) == 200:
             self.degreeangle = random.randrange(200, 260)
 
-        self.target.x -= (((math.degrees(math.sin(math.radians(self.degreeangle))) * self.target.speed) / 40) * self.target.frame_tick)
-        self.target.y -= (((math.degrees(math.cos(math.radians(self.degreeangle))) * self.target.speed) / 40) * self.target.frame_tick)
+        self.target.x -= (((math.degrees(math.sin(math.radians(self.degreeangle))) * self.speed) / 40) * self.target.frame_tick)
+        self.target.y -= (((math.degrees(math.cos(math.radians(self.degreeangle))) * self.speed) / 40) * self.target.frame_tick)

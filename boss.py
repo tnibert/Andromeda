@@ -40,8 +40,10 @@ class Boss(MoveableObject):
     """
 
     def __init__(self, x, y, img, foe):
-        MoveableObject.__init__(self, x, y, BOSS_SPEED, img)
+        MoveableObject.__init__(self, x, y, img)
 
+        self.speed = BOSS_SPEED
+        self.orig_image = self.image
         self.health = BOSSHEALTH
         self.foe = foe
 

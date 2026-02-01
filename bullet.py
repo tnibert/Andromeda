@@ -13,7 +13,8 @@ class Bullet(MoveableObject):
         :param dir: The direction the bullet is traveling
         :param origin: the object that fired the bullet, prevents us from damaging ourselves
         """
-        super().__init__(x, y, BULLETSPEED, img)
+        super().__init__(x, y, img)
+        self.speed = BULLETSPEED
         self.dir = dir
         self.origin = origin
 

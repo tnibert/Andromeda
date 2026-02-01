@@ -13,8 +13,8 @@ import random
 # power ups and downs, to be inherited from
 class StatusModifier(MoveableObject):
     def __init__(self, img):
-        MoveableObject.__init__(self, random.randrange(0, SCREENW), -1 * img.get_height(), STATMOD_SPEED, img,
-                                [TrajectoryMovementBehavior(random.randrange(100, 260), self)])
+        MoveableObject.__init__(self, random.randrange(0, SCREENW), -1 * img.get_height(), img,
+                                [TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)])
 
     def payload(self, target):
         self.notify("remove")

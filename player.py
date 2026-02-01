@@ -18,10 +18,11 @@ class Player(MoveableObject):
     def __init__(self, img, eventqueue):
         explosion_behavior = ExplodeBehavior(self)
 
-        MoveableObject.__init__(self, SCREENW / 2 - img.get_width()/2, SCREENH - img.get_height() - 5, PLAYERSPEED, img, [explosion_behavior])
+        MoveableObject.__init__(self, SCREENW / 2 - img.get_width()/2, SCREENH - img.get_height() - 5, img, [explosion_behavior])
 
         self.subscribe("start_explosion", explosion_behavior.start_exploding)
 
+        self.speed = PLAYERSPEED
         self.health = PLAYERHEALTH
         self.spawnX = self.x
         self.spawnY = self.y

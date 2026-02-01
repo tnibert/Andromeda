@@ -12,9 +12,8 @@ class Enemy(MoveableObject):
         explosion_behavior = ExplodeBehavior(self)
         MoveableObject.__init__(self, random.randrange(0, SCREENW), # x location
                                         -3 * img.get_height(),              # y location
-                                        random.randrange(60, 100),          # speed
                                         img,
-                                        [TrajectoryMovementBehavior(random.randrange(100, 260), self), explosion_behavior])
+                                        [TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self), explosion_behavior])
         self.subscribe("start_explosion", explosion_behavior.start_exploding)
         self.exit_stage = False
         self.dying = False
