@@ -1,7 +1,8 @@
 from gameobject import GameObject
 from constants import SCREENH, SCREENW, SCROLLSPEED, MAXSCROLLSPEED, MAP_LAYER
-from player import Player
+from sprites.player import Player
 
+VSCROLL_OFFSET = 2000
 
 class GameMap(GameObject):
     def __init__(self, image):
@@ -19,8 +20,7 @@ class GameMap(GameObject):
             self.statmodtimer.tick()
 
         # change offset for vertical scroll
-        # todo: make 2000 a constant
-        if self.bgoffset > 2000:
+        if self.bgoffset > VSCROLL_OFFSET:
             self.bgoffset = 0
             self.changeover = 0
             self.ychng = 0

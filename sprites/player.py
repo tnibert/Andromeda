@@ -1,11 +1,11 @@
 from events import EVT_START_EXPLOSION
 from sprite import Sprite
-from bullet import Bullet
+from sprites.bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
-from statusmodifiers import StatusModifier, TimeableStatmod
+from sprites.statusmodifiers import StatusModifier, TimeableStatmod
 from behaviors.explosion import ExplodeBehavior
 from loadstaticres import bulletimg
-from boss import Boss
+from sprites.boss import Boss
 from endgamesignal import EndLevel
 from timer import Timer
 import pygame

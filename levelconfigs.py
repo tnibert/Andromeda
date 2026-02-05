@@ -1,4 +1,4 @@
-import boss
+from sprites import boss
 import pygame
 
 """

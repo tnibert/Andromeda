@@ -4,8 +4,8 @@ from behaviors.trajectory import TrajectoryMovementBehavior
 from events import EVT_START_EXPLOSION
 from sprite import Sprite
 from constants import SCREENW, SCREENH, SAUCER_DEATH_SCORE_INC
-from player import Player
-from bullet import Bullet
+from sprites.player import Player
+from sprites.bullet import Bullet
 import random
 
 from typeset import NoElementPresent

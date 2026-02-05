@@ -1,7 +1,7 @@
 from gamestrategy import Strategy
-from enemy import Enemy
+from sprites.enemy import Enemy
 from gamemap import GameMap
-from statusmodifiers import OneUp, Bomb, SpeedUp, MoreGuns
+from sprites.statusmodifiers import OneUp, Bomb, SpeedUp, MoreGuns
 from utilfuncs import switch
 from timer import Timer
 from textelement import TextElement

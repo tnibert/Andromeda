@@ -14,7 +14,7 @@ from levelconfigs import level_configs
 from scene import Scene
 from queue import Queue
 from level import Level
-from player import Player
+from sprites.player import Player
 from textelement import TextElement
 from endgamesignal import EndLevel
 from splashpage import SplashPage

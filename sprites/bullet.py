@@ -1,7 +1,7 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
 from sprite import Sprite
 from constants import UP, BULLETSPEED, SCREENH
-import boss
+from sprites import boss
 
 
 class Bullet(Sprite):

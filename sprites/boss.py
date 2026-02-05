@@ -5,8 +5,7 @@ from loadstaticres import blank, explosion
 from endgamesignal import EndLevel
 from loadstaticres import bulletimg
 import random
-import bullet
-
+from sprites import bullet
 """
 This file defines all boss behaviors
 """
