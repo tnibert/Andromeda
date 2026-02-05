@@ -1,3 +1,4 @@
+from behaviors.edgedetection import EdgeDetectionBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
 from events import EVT_START_EXPLOSION
@@ -16,7 +17,11 @@ class Enemy(Sprite):
         Sprite.__init__(self, random.randrange(0, SCREENW),  # x location
                         -3 * img.get_height(),  # y location
                         img,
-                        {TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self), explosion_behavior})
+                        {
+                            TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self),
+                            explosion_behavior,
+                            EdgeDetectionBehavior(self.change_direction, self),
+                        })
         self.subscribe(EVT_START_EXPLOSION, explosion_behavior.start_exploding)
         self.exit_stage = False
         self.dying = False  # todo: state machine
@@ -25,22 +30,28 @@ class Enemy(Sprite):
     def update(self):
         super().update()
 
-        # todo: move edge detection to a behavior
-        try:
-            movement = self.behaviors.retrieve_instance(TrajectoryMovementBehavior)
-            if self.x > SCREENW - self.width and movement.degreeangle > 180:
-                self.queue_discard_behavior(TrajectoryMovementBehavior)
-                self.queue_attach_behavior(TrajectoryMovementBehavior(random.randrange(100, 160), random.randrange(60, 100), self))
-            elif self.x < 0 and movement.degreeangle < 180:
-                self.queue_discard_behavior(TrajectoryMovementBehavior)
-                self.queue_attach_behavior(TrajectoryMovementBehavior(random.randrange(200, 260), random.randrange(60, 100), self))
-        except NoElementPresent:
-            print("trajectory movement has been removed")
-
         # todo: randomly change direction mid screen
 
         if self.y > SCREENH:
             self.respawn()
+
+    def change_direction(self):
+        print("changing direction")
+        try:
+            movement = self.behaviors.retrieve_instance(TrajectoryMovementBehavior)
+        except NoElementPresent:
+            print("trajectory movement has been removed")
+            return
+
+        # todo: redundant if with edge detection behavior
+        if self.x > SCREENW - self.width and movement.degreeangle > 180:
+            self.queue_discard_behavior(TrajectoryMovementBehavior)
+            self.queue_attach_behavior(
+                TrajectoryMovementBehavior(random.randrange(100, 160), random.randrange(60, 100), self))
+        elif self.x < 0 and movement.degreeangle < 180:
+            self.queue_discard_behavior(TrajectoryMovementBehavior)
+            self.queue_attach_behavior(
+                TrajectoryMovementBehavior(random.randrange(200, 260), random.randrange(60, 100), self))
 
     def respawn(self, event=None):
         """

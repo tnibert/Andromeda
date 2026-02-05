@@ -10,11 +10,13 @@ import random
 # If you receive multiple power ups, the status will be reset at the end of the timer of
 # the first power up received
 
+# todo: restore bouncing off sides of screen?
+
 # power ups and downs, to be inherited from
 class StatusModifier(Sprite):
     def __init__(self, img):
         Sprite.__init__(self, random.randrange(0, SCREENW), -1 * img.get_height(), img,
-                        [TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)])
+                        {TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)})
 
     def payload(self, target):
         self.notify("remove")
