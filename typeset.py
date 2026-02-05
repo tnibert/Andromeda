@@ -1,3 +1,7 @@
+class NoElementPresent(Exception):
+    pass
+
+
 class TypeSet:
     """
     A set where each element must have a unique type
@@ -16,6 +20,17 @@ class TypeSet:
 
     def discard(self, element_type):
         self.elements = set(filter(lambda x: type(x) != element_type, self.elements))
+
+    def retrieve_instance(self, element_type) -> object:
+        """
+        Returns the element implementing the given class.
+        :param element_type:
+        :return:
+        """
+        match = list(filter(lambda x: type(x) == element_type, self.elements))
+        if len(match) != 1:
+            raise NoElementPresent()
+        return match[0]
 
     def __iter__(self):
         yield from self.elements

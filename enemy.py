@@ -7,6 +7,8 @@ from player import Player
 from bullet import Bullet
 import random
 
+from typeset import NoElementPresent
+
 
 class Enemy(Sprite):
     def __init__(self, img):
@@ -22,6 +24,21 @@ class Enemy(Sprite):
 
     def update(self):
         super().update()
+
+        # todo: move edge detection to a behavior
+        try:
+            movement = self.behaviors.retrieve_instance(TrajectoryMovementBehavior)
+            if self.x > SCREENW - self.width and movement.degreeangle > 180:
+                self.queue_discard_behavior(TrajectoryMovementBehavior)
+                self.queue_attach_behavior(TrajectoryMovementBehavior(random.randrange(100, 160), random.randrange(60, 100), self))
+            elif self.x < 0 and movement.degreeangle < 180:
+                self.queue_discard_behavior(TrajectoryMovementBehavior)
+                self.queue_attach_behavior(TrajectoryMovementBehavior(random.randrange(200, 260), random.randrange(60, 100), self))
+        except NoElementPresent:
+            print("trajectory movement has been removed")
+
+        # todo: randomly change direction mid screen
+
         if self.y > SCREENH:
             self.respawn()
 
