@@ -1,4 +1,4 @@
-from moveableobject import MoveableObject
+from sprite import Sprite
 from timer import Timer
 from constants import BOSS_DEATH_SCORE_INC, BOSSHEALTH, NUM_BOSS_EXPLOSIONS, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
 from loadstaticres import blank, explosion
@@ -32,7 +32,7 @@ RUSH_UP = 3
 RUSH_RECENTER = 4
 
 
-class Boss(MoveableObject):
+class Boss(Sprite):
     """
     State machine for the boss behavior
     Allow for identification of bosses by one type and define base functionality.
@@ -40,7 +40,7 @@ class Boss(MoveableObject):
     """
 
     def __init__(self, x, y, img, foe):
-        MoveableObject.__init__(self, x, y, img)
+        Sprite.__init__(self, x, y, img)
 
         self.speed = BOSS_SPEED
         self.orig_image = self.image
@@ -64,9 +64,9 @@ class Boss(MoveableObject):
         self.boom = []
         self.trigger_index = 0
         for i in range(NUM_BOSS_EXPLOSIONS):
-            self.boom.append(MoveableObject(random.randrange(self.image.get_width() - explosion[0].get_width()),
-                                            random.randrange(self.image.get_height() - explosion[0].get_height()),
-                                            0, blank))
+            self.boom.append(Sprite(random.randrange(self.image.get_width() - explosion[0].get_width()),
+                                    random.randrange(self.image.get_height() - explosion[0].get_height()),
+                                    0, blank))
 
     def update_combat_mode(self, event):
         """

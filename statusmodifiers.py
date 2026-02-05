@@ -1,5 +1,5 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
-from moveableobject import MoveableObject
+from sprite import Sprite
 from constants import SCREENW, SCREENH, STATMOD_DURATION, PLAYERSPEED, PLAYERMAXSPEED, STATMOD_SPEED
 from timer import Timer
 import random
@@ -11,10 +11,10 @@ import random
 # the first power up received
 
 # power ups and downs, to be inherited from
-class StatusModifier(MoveableObject):
+class StatusModifier(Sprite):
     def __init__(self, img):
-        MoveableObject.__init__(self, random.randrange(0, SCREENW), -1 * img.get_height(), img,
-                                [TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)])
+        Sprite.__init__(self, random.randrange(0, SCREENW), -1 * img.get_height(), img,
+                        [TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)])
 
     def payload(self, target):
         self.notify("remove")

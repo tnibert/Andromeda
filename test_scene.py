@@ -2,7 +2,7 @@ import pygame
 pygame.init()
 
 from scene import Scene
-from moveableobject import MoveableObject
+from sprite import Sprite
 from loadstaticres import shipimg
 import pytest
 
@@ -11,7 +11,7 @@ class MockScreen:
     pass
 
 
-class MockGameObj(MoveableObject):
+class MockGameObj(Sprite):
     def __init__(self, x, y, img):
         super().__init__(x, y, 0, img)
         self.testlist = []

@@ -1,9 +1,9 @@
-from moveableobject import MoveableObject
+from sprite import Sprite
 from constants import UP, BULLETSPEED, SCREENH
 import boss
 
 
-class Bullet(MoveableObject):
+class Bullet(Sprite):
     def __init__(self, x, y, img, dir, origin=None):
         """
 

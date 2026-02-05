@@ -1,19 +1,19 @@
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
-from moveableobject import MoveableObject
+from sprite import Sprite
 from constants import SCREENW, SCREENH, SAUCER_DEATH_SCORE_INC
 from player import Player
 from bullet import Bullet
 import random
 
 
-class Enemy(MoveableObject):
+class Enemy(Sprite):
     def __init__(self, img):
         explosion_behavior = ExplodeBehavior(self)
-        MoveableObject.__init__(self, random.randrange(0, SCREENW), # x location
-                                        -3 * img.get_height(),              # y location
-                                        img,
-                                        [TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self), explosion_behavior])
+        Sprite.__init__(self, random.randrange(0, SCREENW),  # x location
+                        -3 * img.get_height(),  # y location
+                        img,
+                        [TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self), explosion_behavior])
         self.subscribe("start_explosion", explosion_behavior.start_exploding)
         self.exit_stage = False
         self.dying = False

@@ -1,4 +1,4 @@
-from moveableobject import MoveableObject
+from sprite import Sprite
 from bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
 from statusmodifiers import StatusModifier, TimeableStatmod
@@ -14,11 +14,11 @@ OFF_SCREEN = -2000
 PLAYER_RESPAWN_DELAY = 3
 
 
-class Player(MoveableObject):
+class Player(Sprite):
     def __init__(self, img, eventqueue):
         explosion_behavior = ExplodeBehavior(self)
 
-        MoveableObject.__init__(self, SCREENW / 2 - img.get_width()/2, SCREENH - img.get_height() - 5, img, [explosion_behavior])
+        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, [explosion_behavior])
 
         self.subscribe("start_explosion", explosion_behavior.start_exploding)
 

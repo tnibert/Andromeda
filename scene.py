@@ -1,4 +1,4 @@
-from moveableobject import MoveableObject
+from sprite import Sprite
 from properties import PROP_COLLISION
 from utilfuncs import collide
 from timer import Timer
