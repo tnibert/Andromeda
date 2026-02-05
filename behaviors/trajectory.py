@@ -4,12 +4,18 @@ import random
 
 class TrajectoryMovementBehavior:
     def __init__(self, angle: int, speed, target):
-        # angle randomly ranges from 100 degrees to 260, 0 degrees is vertical axis
+        """
+
+        :param angle: in degrees, 0 is vertical axis
+        :param speed:
+        :param target:
+        """
         self.degreeangle = angle
         self.target = target
         self.speed = speed
 
     def act(self):
+        # todo: move trajectory changing behavior to enemy.py, and/or an edge checking behavior
         # screen edge checking
         if (self.target.x > SCREENW - self.target.width and self.degreeangle > 180) or random.randrange(0, 2000) == 1467:
             self.degreeangle = random.randrange(100, 160)

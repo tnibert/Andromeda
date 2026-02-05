@@ -1,3 +1,4 @@
+from events import EVT_START_EXPLOSION
 from sprite import Sprite
 from bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
@@ -18,9 +19,9 @@ class Player(Sprite):
     def __init__(self, img, eventqueue):
         explosion_behavior = ExplodeBehavior(self)
 
-        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, [explosion_behavior])
+        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, {explosion_behavior})
 
-        self.subscribe("start_explosion", explosion_behavior.start_exploding)
+        self.subscribe(EVT_START_EXPLOSION, explosion_behavior.start_exploding)
 
         self.speed = PLAYERSPEED
         self.health = PLAYERHEALTH
@@ -127,7 +128,7 @@ class Player(Sprite):
         if not self.dying:
             self.dying = True
             self.health -= 1
-            self.notify("start_explosion")
+            self.notify(EVT_START_EXPLOSION)
             self.notify("alterhealth", value=-1)
 
     def oneup(self):

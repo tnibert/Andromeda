@@ -1,5 +1,6 @@
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
+from events import EVT_START_EXPLOSION
 from sprite import Sprite
 from constants import SCREENW, SCREENH, SAUCER_DEATH_SCORE_INC
 from player import Player
@@ -13,10 +14,10 @@ class Enemy(Sprite):
         Sprite.__init__(self, random.randrange(0, SCREENW),  # x location
                         -3 * img.get_height(),  # y location
                         img,
-                        [TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self), explosion_behavior])
-        self.subscribe("start_explosion", explosion_behavior.start_exploding)
+                        {TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self), explosion_behavior})
+        self.subscribe(EVT_START_EXPLOSION, explosion_behavior.start_exploding)
         self.exit_stage = False
-        self.dying = False
+        self.dying = False  # todo: state machine
         self.orig_image = self.image
 
     def update(self):
@@ -35,7 +36,7 @@ class Enemy(Sprite):
             self.image = self.orig_image
             self.x = random.randrange(0, SCREENW)
             self.y = -3 * self.image.get_height()
-            self.speed = random.randrange(60, 100)
+            self.queue_attach_behavior(TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self))
         else:
             self.notify("remove")
 
@@ -45,11 +46,13 @@ class Enemy(Sprite):
                 if isinstance(event.source, Player):
                     print("on_collide player")
                     self.dying = True
-                    self.notify("start_explosion")
+                    self.queue_discard_behavior(TrajectoryMovementBehavior)
+                    self.notify(EVT_START_EXPLOSION)
                 elif isinstance(event.source, Bullet):
                     print("on_collide bullet")
                     self.dying = True
-                    self.notify("start_explosion")
+                    self.queue_discard_behavior(TrajectoryMovementBehavior)
+                    self.notify(EVT_START_EXPLOSION)
                     event.source.notify("remove")
 
     def leave(self):

@@ -6,7 +6,16 @@ class GameObject(Observable):
     """
     A renderable object in the game
     """
-    def __init__(self, x, y, img, behaviors=None, properties=None, layer=GAMEOBJ_LAYER):
+    def __init__(self, x, y, img, behaviors: set=None, properties: set=None, layer=GAMEOBJ_LAYER):
+        """
+
+        :param x:
+        :param y:
+        :param img:
+        :param behaviors: set of behaviors for game object
+        :param properties: set of properties for game object
+        :param layer:
+        """
         Observable.__init__(self)
 
         self.x = x
@@ -20,18 +29,26 @@ class GameObject(Observable):
         self.frame_tick = 0
 
         if behaviors is None:
-            self.behaviors = []
+            self.behaviors = set()
         else:
             self.behaviors = behaviors
+        self.behavior_attach_queue = []
+        self.behavior_discard_queue = []
 
         if properties is None:
-            self.properties = []
+            self.properties = set()
         else:
             self.properties = properties
 
     def update(self):
         for behavior in self.behaviors:
             behavior.act()
+
+        # process updates to the behavior set
+        for behavior_type in self.behavior_discard_queue:
+            self.discard_behavior(behavior_type)
+        for behavior in self.behavior_attach_queue:
+            self.attach_behavior(behavior)
 
     def render(self, screen):
         screen.blit(self.image, (self.x, self.y))
@@ -55,3 +72,20 @@ class GameObject(Observable):
         :return:
         """
         pass
+
+    def queue_discard_behavior(self, behavior_type):
+        self.behavior_discard_queue.append(behavior_type)
+
+    def queue_attach_behavior(self, behavior):
+        self.behavior_attach_queue.append(behavior)
+
+    def discard_behavior(self, behavior_type):
+        """
+
+        :param behavior_type: the type of behavior to remove
+        :return:
+        """
+        self.behaviors = set(filter(lambda x: type(x) != behavior_type, self.behaviors))
+
+    def attach_behavior(self, behavior):
+        self.behaviors.add(behavior)
