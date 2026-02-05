@@ -1,5 +1,6 @@
 from observe import Observable
 from constants import GAMEOBJ_LAYER
+from typeset import TypeSet
 
 
 class GameObject(Observable):
@@ -29,16 +30,16 @@ class GameObject(Observable):
         self.frame_tick = 0
 
         if behaviors is None:
-            self.behaviors = set()
+            self.behaviors = TypeSet()
         else:
-            self.behaviors = behaviors
+            self.behaviors = TypeSet(behaviors)
         self.behavior_attach_queue = []
         self.behavior_discard_queue = []
 
         if properties is None:
-            self.properties = set()
+            self.properties = TypeSet()
         else:
-            self.properties = properties
+            self.properties = TypeSet(properties)
 
     def update(self):
         for behavior in self.behaviors:
@@ -47,8 +48,10 @@ class GameObject(Observable):
         # process updates to the behavior set
         for behavior_type in self.behavior_discard_queue:
             self.discard_behavior(behavior_type)
+        self.behavior_discard_queue = []
         for behavior in self.behavior_attach_queue:
             self.attach_behavior(behavior)
+        self.behavior_attach_queue = []
 
     def render(self, screen):
         screen.blit(self.image, (self.x, self.y))
@@ -85,7 +88,7 @@ class GameObject(Observable):
         :param behavior_type: the type of behavior to remove
         :return:
         """
-        self.behaviors = set(filter(lambda x: type(x) != behavior_type, self.behaviors))
+        self.behaviors.discard(behavior_type)
 
     def attach_behavior(self, behavior):
         self.behaviors.add(behavior)
