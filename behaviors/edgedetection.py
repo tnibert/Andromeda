@@ -1,4 +1,4 @@
-from constants import SCREENW
+from constants import SCREENW, LEFT, RIGHT
 
 
 class EdgeDetectionBehavior:
@@ -8,5 +8,7 @@ class EdgeDetectionBehavior:
 
     def act(self):
         # side detection
-        if self.target.x > SCREENW - self.target.width or self.target.x < 0:
-            self.edge_detect_handler()
+        if self.target.x > SCREENW - self.target.width:
+            self.edge_detect_handler(RIGHT)
+        elif self.target.x < 0:
+            self.edge_detect_handler(LEFT)

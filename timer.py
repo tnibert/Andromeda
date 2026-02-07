@@ -1,3 +1,4 @@
+from events import EVT_TIMEOUT
 from observe import Observable
 import time
 
@@ -44,11 +45,9 @@ class Timer(Observable):
         # if stop watch is running
         if self.start:
             if (curtime - self.start) > self.threshold:
-
                 # allows the callback to start another timer
                 self.stopwatch()
-
-                self.owner.notify("timeout")
+                self.owner.notify(EVT_TIMEOUT)
 
         self.notify("tick", diff=diff)
         return diff

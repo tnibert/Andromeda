@@ -1,4 +1,7 @@
 import pygame
+
+from events import EVT_TIMEOUT
+
 pygame.init()
 
 from loadstaticres import shipimg
@@ -23,7 +26,7 @@ def test_timeout_timer_own():
     testlist = []
 
     t = Timer()
-    t.subscribe("timeout", lambda e: testlist.append(e.source))
+    t.subscribe(EVT_TIMEOUT, lambda e: testlist.append(e.source))
     t.startwatch(1)
     time.sleep(1)
     t.tick()
@@ -37,7 +40,7 @@ def test_timeout_obj_own():
 
     g = MockGameObj(0, 0, shipimg)
     t = Timer(owner=g)
-    g.subscribe("timeout", lambda e: testlist.append(e.source))
+    g.subscribe(EVT_TIMEOUT, lambda e: testlist.append(e.source))
     t.startwatch(1)
     time.sleep(1)
     t.tick()

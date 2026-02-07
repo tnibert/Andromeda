@@ -1,3 +1,4 @@
+from events import EVT_TIMEOUT
 from sprite import Sprite
 from timer import Timer
 from constants import BOSS_DEATH_SCORE_INC, BOSSHEALTH, NUM_BOSS_EXPLOSIONS, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
@@ -57,7 +58,7 @@ class Boss(Sprite):
 
         self.combat_state_timer = Timer()
         self.combat_state_change_time = 5
-        self.combat_state_timer.subscribe("timeout", self.update_combat_mode)
+        self.combat_state_timer.subscribe(EVT_TIMEOUT, self.update_combat_mode)
 
         # create boss explosions
         self.boom = []

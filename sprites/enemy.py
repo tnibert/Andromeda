@@ -1,56 +1,45 @@
-from behaviors.edgedetection import EdgeDetectionBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
 from events import EVT_START_EXPLOSION
 from sprite import Sprite
-from constants import SCREENW, SCREENH, SAUCER_DEATH_SCORE_INC
+from constants import SCREENW, RIGHT, LEFT
 from sprites.player import Player
 from sprites.bullet import Bullet
 import random
 
+from statemachines.defaultenemy import default_enemy_state_graph
 from typeset import NoElementPresent
 
 
 class Enemy(Sprite):
     def __init__(self, img):
-        explosion_behavior = ExplodeBehavior(self)
         Sprite.__init__(self, random.randrange(0, SCREENW),  # x location
                         -3 * img.get_height(),  # y location
-                        img,
-                        {
-                            TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self),
-                            explosion_behavior,
-                            EdgeDetectionBehavior(self.change_direction, self),
-                        })
-        self.subscribe(EVT_START_EXPLOSION, explosion_behavior.start_exploding)
+                        img)
+        explosion_behavior = ExplodeBehavior(self)
+        self.state_graph = default_enemy_state_graph(self, explosion_behavior)
+
         self.exit_stage = False
-        self.dying = False  # todo: state machine
+
         self.orig_image = self.image
 
     def update(self):
         super().update()
 
-        # todo: randomly change direction mid screen
-
-        if self.y > SCREENH:
-            self.respawn()
-
-    def change_direction(self):
-        print("changing direction")
+    def change_direction(self, direction):
         try:
-            movement = self.behaviors.retrieve_instance(TrajectoryMovementBehavior)
+            movement = self.state_graph.behaviors.retrieve_instance(TrajectoryMovementBehavior)
         except NoElementPresent:
             print("trajectory movement has been removed")
             return
 
-        # todo: redundant if with edge detection behavior
-        if self.x > SCREENW - self.width and movement.degreeangle > 180:
-            self.queue_discard_behavior(TrajectoryMovementBehavior)
-            self.queue_attach_behavior(
+        if direction == RIGHT and movement.degreeangle > 180:
+            self.state_graph.queue_discard_behavior(TrajectoryMovementBehavior)
+            self.state_graph.queue_attach_behavior(
                 TrajectoryMovementBehavior(random.randrange(100, 160), random.randrange(60, 100), self))
-        elif self.x < 0 and movement.degreeangle < 180:
-            self.queue_discard_behavior(TrajectoryMovementBehavior)
-            self.queue_attach_behavior(
+        elif direction == LEFT and movement.degreeangle < 180:
+            self.state_graph.queue_discard_behavior(TrajectoryMovementBehavior)
+            self.state_graph.queue_attach_behavior(
                 TrajectoryMovementBehavior(random.randrange(200, 260), random.randrange(60, 100), self))
 
     def respawn(self, event=None):
@@ -58,30 +47,18 @@ class Enemy(Sprite):
         Respawn if not set to exit
         :return:
         """
-        self.notify("score_up", value=SAUCER_DEATH_SCORE_INC)
-        self.dying = False
-        if not self.exit_stage:
-            self.image = self.orig_image
-            self.x = random.randrange(0, SCREENW)
-            self.y = -3 * self.image.get_height()
-            self.queue_attach_behavior(TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), self))
-        else:
+        if self.exit_stage:
             self.notify("remove")
 
     def on_collide(self, event):
         if event.kwargs.get("who") == self:
-            if not self.dying:
-                if isinstance(event.source, Player):
-                    print("on_collide player")
-                    self.dying = True
-                    self.queue_discard_behavior(TrajectoryMovementBehavior)
-                    self.notify(EVT_START_EXPLOSION)
-                elif isinstance(event.source, Bullet):
-                    print("on_collide bullet")
-                    self.dying = True
-                    self.queue_discard_behavior(TrajectoryMovementBehavior)
-                    self.notify(EVT_START_EXPLOSION)
-                    event.source.notify("remove")
+            if isinstance(event.source, Player):
+                #print("on_collide player")
+                self.notify(EVT_START_EXPLOSION)
+            elif isinstance(event.source, Bullet):
+                #print("on_collide bullet")
+                self.notify(EVT_START_EXPLOSION)
+                event.source.notify("remove")
 
     def leave(self):
         """

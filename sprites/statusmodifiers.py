@@ -1,8 +1,11 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
 from sprite import Sprite
 from constants import SCREENW, SCREENH, STATMOD_DURATION, PLAYERSPEED, PLAYERMAXSPEED, STATMOD_SPEED
+from statemachine import State
 from timer import Timer
 import random
+
+from typeset import TypeSet
 
 
 # todo: handling of timers with acquisition of multiple power ups in player and gamemap
@@ -16,7 +19,7 @@ import random
 class StatusModifier(Sprite):
     def __init__(self, img):
         Sprite.__init__(self, random.randrange(0, SCREENW), -1 * img.get_height(), img,
-                        {TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)})
+                        State(self, TypeSet({TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)})))
 
     def payload(self, target):
         self.notify("remove")

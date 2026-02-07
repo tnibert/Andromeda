@@ -2,6 +2,8 @@ from behaviors.trajectory import TrajectoryMovementBehavior
 from sprite import Sprite
 from constants import UP, BULLETSPEED, SCREENH
 from sprites import boss
+from statemachine import State
+from typeset import TypeSet
 
 
 class Bullet(Sprite):
@@ -14,7 +16,7 @@ class Bullet(Sprite):
         :param direction: The direction the bullet is traveling
         :param origin: the object that fired the bullet, prevents us from damaging ourselves
         """
-        super().__init__(x, y, img, {TrajectoryMovementBehavior(0 if direction == UP else 180, BULLETSPEED, self)})
+        super().__init__(x, y, img, State(self, TypeSet({TrajectoryMovementBehavior(0 if direction == UP else 180, BULLETSPEED, self)})))
         self.origin = origin
 
     def update(self):

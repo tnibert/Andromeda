@@ -1,2 +1,5 @@
 EVT_ACT = "act"
 EVT_START_EXPLOSION = "start_explosion"
+EVT_TIMEOUT = "timeout"
+EVT_EXPLOSION_FINISH = "explosion_finish"
+EVT_RESPAWN_FINISH = "respawn_finish"

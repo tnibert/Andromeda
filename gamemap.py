@@ -1,3 +1,4 @@
+from events import EVT_TIMEOUT
 from gameobject import GameObject
 from constants import SCREENH, SCREENW, SCROLLSPEED, MAXSCROLLSPEED, MAP_LAYER
 from sprites.player import Player
@@ -43,7 +44,7 @@ class GameMap(GameObject):
         if isinstance(event.kwargs.get("who"), Player):
             self.scrollspeed = MAXSCROLLSPEED
             self.statmodtimer = event.source.timer
-            event.source.subscribe("timeout", self.reset_speed)
+            event.source.subscribe(EVT_TIMEOUT, self.reset_speed)
 
     def reset_speed(self, event):
         self.scrollspeed = SCROLLSPEED

@@ -1,4 +1,4 @@
-from events import EVT_START_EXPLOSION
+from events import EVT_START_EXPLOSION, EVT_TIMEOUT
 from sprite import Sprite
 from sprites.bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
@@ -7,9 +7,11 @@ from behaviors.explosion import ExplodeBehavior
 from loadstaticres import bulletimg
 from sprites.boss import Boss
 from endgamesignal import EndLevel
+from statemachine import State
 from timer import Timer
 import pygame
 
+from typeset import TypeSet
 
 OFF_SCREEN = -2000
 PLAYER_RESPAWN_DELAY = 3
@@ -19,7 +21,7 @@ class Player(Sprite):
     def __init__(self, img, eventqueue):
         explosion_behavior = ExplodeBehavior(self)
 
-        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, {explosion_behavior})
+        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, State(self, TypeSet({}))) # State(self, TypeSet({explosion_behavior}))
 
         self.subscribe(EVT_START_EXPLOSION, explosion_behavior.start_exploding)
 
@@ -128,7 +130,7 @@ class Player(Sprite):
         if not self.dying:
             self.dying = True
             self.health -= 1
-            self.notify(EVT_START_EXPLOSION)
+            #self.notify(EVT_START_EXPLOSION)
             self.notify("alterhealth", value=-1)
 
     def oneup(self):
@@ -156,7 +158,7 @@ class Player(Sprite):
             if isinstance(event.source, StatusModifier):
                 event.source.payload(self)
                 if isinstance(event.source, TimeableStatmod):
-                    event.source.subscribe("timeout", self.receive_signals)
+                    event.source.subscribe(EVT_TIMEOUT, self.receive_signals)
                     self.statmods.append(event.source)
             elif "Enemy" in str(event.source):
                 self.die()
@@ -167,6 +169,6 @@ class Player(Sprite):
                     self.die()
 
     def receive_signals(self, event):
-        if event.name == "timeout" and isinstance(event.source, TimeableStatmod):
+        if event.name == EVT_TIMEOUT and isinstance(event.source, TimeableStatmod):
             event.source.reverse(self)
             self.statmods.remove(event.source)

@@ -1,3 +1,4 @@
+from events import EVT_TIMEOUT
 from gamestrategy import Strategy
 from sprites.enemy import Enemy
 from gamemap import GameMap
@@ -67,9 +68,9 @@ class Level(Strategy):
         # so that map speed up resets on player death
         self.ship.subscribe("player_respawn", self.game_map.reset_speed)
 
-        self.saucer_timer.subscribe("timeout", self.add_saucer)
+        self.saucer_timer.subscribe(EVT_TIMEOUT, self.add_saucer)
 
-        self.start_text_timer.subscribe("timeout", self.remove_start_text)
+        self.start_text_timer.subscribe(EVT_TIMEOUT, self.remove_start_text)
 
         # create initial enemies
         for x in range(0, INITIAL_SAUCERS):
