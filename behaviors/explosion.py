@@ -10,22 +10,21 @@ class ExplodeBehavior(Observable):
     """
     def __init__(self, target):
         Observable.__init__(self)
+        self.target = target
+        self.reset()
+
+    def reset(self):
         self.exploding = False
-        self.halt_exploding = False
         self.explosion_index = 0
 
         self.explosion_timer = Timer()
         self.explosion_timer.subscribe(EVT_TIMEOUT, self.update_explosion)
-
-        self.target = target
-
 
     def act(self):
         if not self.exploding:
             self.start_exploding()
         if self.exploding:
             self.explosion_timer.tick()
-
 
     def start_exploding(self, event=None):
         """
@@ -48,6 +47,5 @@ class ExplodeBehavior(Observable):
             self.target.image = explosion[self.explosion_index]
             self.explosion_timer.startwatch(EXPLOSION_FRAME_UPDATE_WAIT)
         else:
-            print("stop exploding")
-            self.explosion_index = 0
+            self.reset()
             self.target.notify(EVT_EXPLOSION_FINISH)
