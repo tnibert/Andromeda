@@ -1,7 +1,7 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
 from sprite import Sprite
 from constants import SCREENW, SCREENH, STATMOD_DURATION, PLAYERSPEED, PLAYERMAXSPEED, STATMOD_SPEED
-from statemachine import State
+from statemachine import State, StateMachine
 from timer import Timer
 import random
 
@@ -19,7 +19,7 @@ from typeset import TypeSet
 class StatusModifier(Sprite):
     def __init__(self, img):
         Sprite.__init__(self, random.randrange(0, SCREENW), -1 * img.get_height(), img,
-                        State(self, TypeSet({TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)})))
+                        StateMachine(State(self, TypeSet({TrajectoryMovementBehavior(random.randrange(100, 260), STATMOD_SPEED, self)}))))
 
     def payload(self, target):
         self.notify("remove")

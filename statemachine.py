@@ -20,29 +20,12 @@ class State:
         self.behavior_attach_queue = []
         self.behavior_discard_queue = []
 
-        self.next_state = self
-
-    def state_transition_event(self, event: Event):
-        """
-        todo: this will currently be actioned even if the state is not the current state
-        :param event:
-        :return:
-        """
-        next_state = self.transitions.get(event.name)
-        if next_state is not None:
-            print("set next state {}".format(next_state.name))
-            self.next_state = next_state
-
     def transition(self) -> State:
         for trigger, next_state in self.transitions.items():
             if callable(trigger) and trigger(self.target):
                 print("next state via trigger {}".format(next_state.name))
-                self.next_state = next_state
-
-        # reset next state
-        temp = self.next_state
-        self.next_state = self
-        return temp
+                return next_state
+        return self
 
     def behave(self):
         for behavior in self.behaviors:
@@ -72,3 +55,26 @@ class State:
 
     def attach_behavior(self, behavior):
         self.behaviors.add(behavior)
+
+
+class StateMachine:
+    def __init__(self, initial: State):
+        self.current_state = initial
+        self.last_state = ""
+
+    def state_transition_event(self, event: Event):
+        """
+        :param event:
+        :return:
+        """
+        next_state = self.current_state.transitions.get(event.name)
+        if next_state is not None:
+            print("set next state {}".format(next_state.name))
+            self.current_state = next_state
+
+    def iteration(self):
+        self.current_state = self.current_state.transition()
+        if self.current_state.name != self.last_state:
+            print("state transition {} -> {}".format(self.last_state, self.current_state.name))
+            self.last_state = self.current_state.name
+        self.current_state.behave()

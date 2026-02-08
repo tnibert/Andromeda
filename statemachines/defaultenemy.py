@@ -6,12 +6,12 @@ from behaviors.enemy.respawn import EnemyRespawnBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
 from constants import SCREENH
-from events import EVT_TIMEOUT, EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_RESPAWN_FINISH
-from statemachine import State
+from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_RESPAWN_FINISH
+from statemachine import State, StateMachine
 from typeset import TypeSet
 
 
-def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> State:
+def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> StateMachine:
     # set up nodes
     respawn = State(target,
                     TypeSet({EnemyRespawnBehavior(target)}), name="respawn")
@@ -35,16 +35,18 @@ def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> St
         EVT_START_EXPLOSION: exploding,
         lambda t: t.exit_stage: exit_scene
     }
-    target.subscribe(EVT_START_EXPLOSION, initial.state_transition_event)
     respawn.transitions = {
         EVT_RESPAWN_FINISH: initial,
         lambda t: t.exit_stage: exit_scene
     }
-    target.subscribe(EVT_RESPAWN_FINISH, respawn.state_transition_event)
     exploding.transitions = {
         EVT_EXPLOSION_FINISH: respawn,
         lambda t: t.exit_stage: exit_scene
     }
-    target.subscribe(EVT_EXPLOSION_FINISH, exploding.state_transition_event)
 
-    return initial
+    state_machine = StateMachine(initial)
+    target.subscribe(EVT_START_EXPLOSION, state_machine.state_transition_event)
+    target.subscribe(EVT_RESPAWN_FINISH, state_machine.state_transition_event)
+    target.subscribe(EVT_EXPLOSION_FINISH, state_machine.state_transition_event)
+
+    return state_machine

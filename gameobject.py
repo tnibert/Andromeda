@@ -1,6 +1,6 @@
 from observe import Observable
 from constants import GAMEOBJ_LAYER
-from statemachine import State
+from statemachine import State, StateMachine
 from typeset import TypeSet
 
 
@@ -8,7 +8,7 @@ class GameObject(Observable):
     """
     A renderable object in the game
     """
-    def __init__(self, x, y, img, state_graph=None, properties: set=None, layer=GAMEOBJ_LAYER):
+    def __init__(self, x, y, img, state_graph: StateMachine=None, properties: set=None, layer=GAMEOBJ_LAYER):
         """
 
         :param x:
@@ -31,10 +31,9 @@ class GameObject(Observable):
         self.frame_tick = 0
 
         if state_graph is None:
-            self.state_graph = State(self, TypeSet())
+            self.state_machine = StateMachine(State(self, TypeSet()))
         else:
-            self.state_graph = state_graph
-        self.last_state = self.state_graph.name
+            self.state_machine = state_graph
 
         if properties is None:
             self.properties = TypeSet()
@@ -42,11 +41,7 @@ class GameObject(Observable):
             self.properties = TypeSet(properties)
 
     def update(self):
-        self.state_graph = self.state_graph.transition()
-        if self.state_graph.name != self.last_state:
-            print("state transition {} -> {}".format(self.last_state, self.state_graph.name))
-            self.last_state = self.state_graph.name
-        self.state_graph.behave()
+        self.state_machine.iteration()
 
     def render(self, screen):
         screen.blit(self.image, (self.x, self.y))

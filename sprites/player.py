@@ -7,7 +7,7 @@ from behaviors.explosion import ExplodeBehavior
 from loadstaticres import bulletimg
 from sprites.boss import Boss
 from endgamesignal import EndLevel
-from statemachine import State
+from statemachine import State, StateMachine
 from timer import Timer
 import pygame
 
@@ -21,7 +21,7 @@ class Player(Sprite):
     def __init__(self, img, eventqueue):
         explosion_behavior = ExplodeBehavior(self)
 
-        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, State(self, TypeSet({}))) # State(self, TypeSet({explosion_behavior}))
+        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, StateMachine(State(self, TypeSet({})))) # State(self, TypeSet({explosion_behavior}))
 
         self.subscribe(EVT_START_EXPLOSION, explosion_behavior.start_exploding)
 
