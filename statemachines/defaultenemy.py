@@ -2,7 +2,7 @@ import random
 
 from behaviors.collision import CollisionBehavior
 from behaviors.edgedetection import EdgeDetectionBehavior
-from behaviors.enemy.respawn import EnemyRespawnBehavior
+from behaviors.respawn import RespawnBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
 from constants import SCREENH, SCREENW
@@ -12,9 +12,17 @@ from typeset import TypeSet
 
 
 def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> StateMachine:
+    def respawn_proc():
+        if target.exit_stage:
+            target.notify("remove")
+
     # set up nodes
     respawn = State(target,
-                    TypeSet({EnemyRespawnBehavior(target, lambda: random.randrange(0, SCREENW), lambda: -3 * target.image.get_height())}),
+                    TypeSet({RespawnBehavior(target,
+                                             target.image,
+                                             lambda: random.randrange(0, SCREENW),
+                                             lambda: -3 * target.image.get_height(),
+                                             respawn_proc)}),
                     name="respawn")
 
     initial = State(target,

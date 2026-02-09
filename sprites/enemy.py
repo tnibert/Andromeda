@@ -21,8 +21,6 @@ class Enemy(Sprite):
 
         self.exit_stage = False
 
-        self.orig_image = self.image
-
     def update(self):
         super().update()
 
@@ -41,14 +39,6 @@ class Enemy(Sprite):
             self.state_machine.current_state.queue_discard_behavior(TrajectoryMovementBehavior)
             self.state_machine.current_state.queue_attach_behavior(
                 TrajectoryMovementBehavior(random.randrange(200, 260), random.randrange(60, 100), self))
-
-    def respawn(self, event=None):
-        """
-        Respawn if not set to exit
-        :return:
-        """
-        if self.exit_stage:
-            self.notify("remove")
 
     def on_collide(self, event):
         if event.kwargs.get("who") == self:

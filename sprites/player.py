@@ -8,27 +8,26 @@ from loadstaticres import bulletimg
 from sprites.boss import Boss
 from endgamesignal import EndLevel
 from statemachine import State, StateMachine
+from statemachines.defaultplayer import default_player_state_graph
 from timer import Timer
 import pygame
 
 from typeset import TypeSet
 
 OFF_SCREEN = -2000
-PLAYER_RESPAWN_DELAY = 3
 
 
 class Player(Sprite):
     def __init__(self, img, eventqueue):
         explosion_behavior = ExplodeBehavior(self)
 
-        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img, StateMachine(State(self, TypeSet({})))) # State(self, TypeSet({explosion_behavior}))
-
+        Sprite.__init__(self, SCREENW / 2 - img.get_width() / 2, SCREENH - img.get_height() - 5, img)
+        self.state_machine = default_player_state_graph(self, explosion_behavior)
         self.subscribe(EVT_START_EXPLOSION, explosion_behavior.start_exploding)
 
         self.speed = PLAYERSPEED
         self.health = PLAYERHEALTH
-        self.spawnX = self.x
-        self.spawnY = self.y
+
         # bamf mode - shoot three bullets at a time
         self.bamfmode = False
 
@@ -43,16 +42,9 @@ class Player(Sprite):
         self.statmods = []
 
         self.dying = False
-        self.orig_image = self.image
-
-        # timer for respawn delay after explosion
-        #self.respawn_timer = Timer()
-        #self.respawn_timer.subscribe("timeout", self.respawn)
 
     def update(self):
         super().update()
-        #if self.respawn_timer.is_timing():
-        #    self.respawn_timer.tick()
 
         # handle user input
         while not self.eventqueue.empty():
@@ -130,7 +122,7 @@ class Player(Sprite):
         if not self.dying:
             self.dying = True
             self.health -= 1
-            #self.notify(EVT_START_EXPLOSION)
+            self.notify(EVT_START_EXPLOSION)
             self.notify("alterhealth", value=-1)
 
     def oneup(self):
@@ -143,15 +135,9 @@ class Player(Sprite):
             raise EndLevel({"state": "failure"})
         else:
             self.dying = False
-            self.x = self.spawnX
-            self.y = self.spawnY
             self.speed = PLAYERSPEED
-            self.image = self.orig_image
             self.bamfmode = False
             self.notify("player_respawn")
-
-    #def explosion_finish(self, event):
-    #    self.respawn_timer.startwatch(PLAYER_RESPAWN_DELAY)
 
     def on_collide(self, event):
         if event.kwargs.get("who") == self:
