@@ -1,5 +1,6 @@
 from events import EVT_TIMEOUT
 from sprite import Sprite
+from sprites.bullet import Bullet
 from statemachines.magykalboss import magykal_boss_graph
 from timer import Timer
 from constants import BOSS_DEATH_SCORE_INC, BOSSHEALTH, NUM_BOSS_EXPLOSIONS, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
@@ -128,6 +129,15 @@ class Boss(Sprite):
         self.exploding = True
         self.image = self.image.copy()
         self.boom[self.trigger_index].start_exploding()
+
+    def on_collide(self, event):
+        if isinstance(event.source, Bullet) \
+                and event.kwargs.get("who") is self \
+                and event.source is not self \
+                and self.health > 0:
+            self.health -= 1
+            self.notify("health_down", value=-1)
+            event.source.notify("remove")
 
 
 class InvaderBossBehave(Boss):
