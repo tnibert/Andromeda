@@ -5,7 +5,7 @@ from behaviors.edgedetection import EdgeDetectionBehavior
 from behaviors.enemy.respawn import EnemyRespawnBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
-from constants import SCREENH
+from constants import SCREENH, SCREENW
 from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_RESPAWN_FINISH
 from statemachine import State, StateMachine
 from typeset import TypeSet
@@ -14,7 +14,8 @@ from typeset import TypeSet
 def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> StateMachine:
     # set up nodes
     respawn = State(target,
-                    TypeSet({EnemyRespawnBehavior(target)}), name="respawn")
+                    TypeSet({EnemyRespawnBehavior(target, lambda: random.randrange(0, SCREENW), lambda: -3 * target.image.get_height())}),
+                    name="respawn")
 
     initial = State(target,
                     TypeSet({
