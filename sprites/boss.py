@@ -1,5 +1,6 @@
 from events import EVT_TIMEOUT
 from sprite import Sprite
+from statemachines.magykalboss import magykal_boss_graph
 from timer import Timer
 from constants import BOSS_DEATH_SCORE_INC, BOSSHEALTH, NUM_BOSS_EXPLOSIONS, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
 from loadstaticres import blank, explosion
@@ -47,14 +48,13 @@ class Boss(Sprite):
         self.health = BOSSHEALTH
         self.foe = foe
 
+        self.exploding = False
+
         # initial direction
         self.dir = random.randrange(0, 4)
 
         # counts number of steps in a given direction
         self.step = 0
-
-        # overarching state
-        self.game_state = BOSS_STATE_ENTERING
 
         self.combat_state_timer = Timer()
         self.combat_state_change_time = 5
@@ -90,49 +90,7 @@ class Boss(Sprite):
         """
         All bosses will have the same overarching state changes, but not combat strategies.
         """
-
         super().update()
-        if self.game_state == BOSS_STATE_ENTERING:
-            if self.y < 5:
-                self.y += self.speed * self.frame_tick
-            else:
-                self.game_state = BOSS_STATE_FIGHTING
-                self.combat_state_timer.startwatch(self.combat_state_change_time)
-
-        elif self.game_state == BOSS_STATE_FIGHTING:
-            if self.health <= 0:
-                self.game_state = BOSS_STATE_DYING
-                return
-
-            self.combat_state_timer.tick()
-            self.combat_move()
-
-        elif self.game_state == BOSS_STATE_DYING:
-            if not self.exploding:
-                self.start_exploding()
-                self.notify("death", value=BOSS_DEATH_SCORE_INC)
-
-            for e in self.boom:
-                e.update()
-
-            # start next explosion if the previous is finished
-            if not self.boom[self.trigger_index].exploding and self.trigger_index < len(self.boom)-1:
-                self.trigger_index += 1
-                self.boom[self.trigger_index].start_exploding()
-
-            # render explosions onto boss
-            # todo: make sections of boss transparent after explosions
-            self.image = self.orig_image.copy()
-            for e in self.boom:
-                e.render(self.image)
-
-            # check if all explosions are finished
-            if self.trigger_index == len(self.boom)-1 and not self.boom[self.trigger_index].exploding:
-                self.game_state = BOSS_STATE_DEAD
-                self.exploding = False
-
-        elif self.game_state == BOSS_STATE_DEAD:
-            raise EndLevel({"state": "victory"})
 
     def adjust_for_boundaries(self):
         """
@@ -261,9 +219,10 @@ class InvaderBossBehave(Boss):
 
 
 class MagykalBossBehave(Boss):
-
     def __init__(self, x, y, img, foe):
         super().__init__(x, y, img, foe)
+
+        self.state_machine = magykal_boss_graph(self)
 
         # combat move mode
         self.mode = MOVE_MODE_STILL
