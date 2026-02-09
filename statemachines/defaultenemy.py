@@ -36,7 +36,9 @@ def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> St
                       TypeSet({explosion_behavior}), name="exploding")
 
     exit_scene = State(target,
-                       TypeSet({}), name="exit scene")
+                       TypeSet({
+                           TrajectoryMovementBehavior(180, random.randrange(60, 100), target)
+                       }), name="exit scene")
 
     # set up edges
     initial.transitions = {
