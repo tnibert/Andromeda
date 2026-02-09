@@ -66,7 +66,7 @@ class Boss(Sprite):
         for i in range(NUM_BOSS_EXPLOSIONS):
             self.boom.append(Sprite(random.randrange(self.image.get_width() - explosion[0].get_width()),
                                     random.randrange(self.image.get_height() - explosion[0].get_height()),
-                                    0, blank))
+                                    blank))
 
     def update_combat_mode(self, event):
         """

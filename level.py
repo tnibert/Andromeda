@@ -89,7 +89,6 @@ class Level(Strategy):
         self.start_text_timer.startwatch(LVL_START_TIME)
 
     def run_game(self):
-
         try:
             if not self.mixer.music.get_busy():
                 # start music on endless loop
