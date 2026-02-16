@@ -7,6 +7,8 @@ from pygame import font
 SCREENH = 800
 SCREENW = 640
 
+TURRET_DIMENSION = 64
+
 LEFT = 0
 RIGHT = 1
 UP = 2

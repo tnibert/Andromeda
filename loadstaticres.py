@@ -1,4 +1,5 @@
 from utilfuncs import toframes
+from constants import TURRET_DIMENSION
 import pygame
 
 
@@ -17,4 +18,4 @@ moregunsimg = pygame.image.load("assets/guns.png")
 
 blank = pygame.Surface((1, 1))
 
-turretimg = pygame.transform.scale(pygame.image.load("assets/td_basic_towers/PNG/Tower.png"), (64, 64))
+turretimg = pygame.transform.scale(pygame.image.load("assets/td_basic_towers/PNG/Tower.png"), (TURRET_DIMENSION, TURRET_DIMENSION))

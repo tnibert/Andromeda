@@ -1,4 +1,4 @@
-from events import EVT_TIMEOUT
+from events import EVT_TIMEOUT, EVT_MAP_PROGRESS
 from gameobject import GameObject
 from constants import SCREENH, SCREENW, SCROLLSPEED, MAXSCROLLSPEED, MAP_LAYER
 from sprites.player import Player
@@ -14,6 +14,8 @@ class GameMap(GameObject):
         self.scrollspeed = SCROLLSPEED
         self.statmodtimer = None
 
+        self.total_progress = 0
+
     def update(self):
         super().update()
 
@@ -21,16 +23,20 @@ class GameMap(GameObject):
             self.statmodtimer.tick()
 
         # change offset for vertical scroll
+        progress_change = self.scrollspeed * self.frame_tick
+        self.total_progress += progress_change
         if self.bgoffset > VSCROLL_OFFSET:
             self.bgoffset = 0
             self.changeover = 0
             self.ychng = 0
         else:
-            self.bgoffset += (self.scrollspeed * self.frame_tick)
+            self.bgoffset += progress_change
 
         if 2000 >= self.bgoffset > 2000 - SCREENH:
-            self.ychng += (self.scrollspeed * self.frame_tick)
+            self.ychng += progress_change
             self.changeover = 1
+
+        self.notify(EVT_MAP_PROGRESS, progress_change=progress_change, total_progress=self.total_progress)
 
     def render(self, screen):
         # for seamless vertical scrolling
