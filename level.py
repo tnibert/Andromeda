@@ -1,13 +1,14 @@
 from events import EVT_TIMEOUT
 from gamestrategy import Strategy
 from sprites.enemy import Enemy
+from sprites.turret import Turret
 from gamemap import GameMap
 from sprites.statusmodifiers import OneUp, Bomb, SpeedUp, MoreGuns
 from utilfuncs import switch
 from timer import Timer
 from textelement import TextElement
 from endgamesignal import EndLevel
-from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg
+from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg, turretimg
 from constants import NEW_SAUCER_IVAL, SAUCER_THRESHOLD, SCREENW, SCREENH, VAL_TEXT_SIZE, BOSSHEALTH, VAL_X_LOC, VAL_FONT, VAL_Y_LOC_START, TEXTCOLOR, INITIAL_SAUCERS, LVL_START_FONT, LVL_START_TIME
 import random
 
@@ -78,6 +79,9 @@ class Level(Strategy):
             newsaucer.subscribe("score_up", self.score_label.update_value)
             self.saucers.append(newsaucer)
             self.scene.attach(newsaucer)
+
+        turret = Turret(turretimg)
+        self.scene.attach(turret)
 
         self.scene.attach(self.ship)
         self.scene.attach(self.game_map)
