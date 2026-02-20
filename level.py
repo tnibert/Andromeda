@@ -8,7 +8,7 @@ from utilfuncs import switch
 from timer import Timer
 from textelement import TextElement
 from endgamesignal import EndLevel
-from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg, turretimg
+from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg, turretimg, gunimg
 from constants import NEW_SAUCER_IVAL, SAUCER_THRESHOLD, SCREENW, SCREENH, VAL_TEXT_SIZE, BOSSHEALTH, VAL_X_LOC, VAL_FONT, VAL_Y_LOC_START, TEXTCOLOR, INITIAL_SAUCERS, LVL_START_FONT, LVL_START_TIME, TURRET_DIMENSION
 import random
 
@@ -80,7 +80,7 @@ class Level(Strategy):
             self.saucers.append(newsaucer)
             self.scene.attach(newsaucer)
 
-        turret = Turret(SCREENW/2, 0, turretimg)
+        turret = Turret(SCREENW/2, 0, turretimg, gunimg)
         self.game_map.subscribe(EVT_MAP_PROGRESS, turret.map_progress_event)
         self.scene.attach(turret)
 
