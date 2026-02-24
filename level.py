@@ -81,6 +81,7 @@ class Level(Strategy):
             self.scene.attach(newsaucer)
 
         turret = Turret(SCREENW/2, 0, turretimg, gunimg, self.ship)
+        turret.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
         self.game_map.subscribe(EVT_MAP_PROGRESS, turret.map_progress_event)
         self.scene.attach(turret)
 

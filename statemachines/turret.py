@@ -1,6 +1,7 @@
 from behaviors.collision import CollisionBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.trackingrotation import TrackingRotationBehavior
+from behaviors.fire import FireBehavior
 from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION
 from statemachine import State, StateMachine
 from typeset import TypeSet
@@ -10,6 +11,7 @@ def turret_state_graph(target, player) -> StateMachine:
                     TypeSet({
                         CollisionBehavior(target),
                         TrackingRotationBehavior(target, player),
+                        FireBehavior(target),
                     }),
                     name="initial")
 
