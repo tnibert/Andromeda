@@ -1,11 +1,13 @@
 from sprite import Sprite
+from statemachines.turret import turret_state_graph
+from behaviors.explosion import ExplodeBehavior
 from constants import SCREENH, TURRET_DIMENSION
 
 class Turret(Sprite):
     """
     Join images of base and rotating gun
     """
-    def __init__(self, initial_x, initial_y, base_img, gun_img):
+    def __init__(self, initial_x, initial_y, base_img, gun_img, player):
         Sprite.__init__(self,
                         initial_x,
                         initial_y,
@@ -14,23 +16,18 @@ class Turret(Sprite):
         gun_x, gun_y = center_image_within(base_img, gun_img)
         self.gun_img = Sprite(gun_x, gun_y, gun_img)
 
-        self.rotation = 0 # testing
+        self.rotation = 0
+        self.state_machine = turret_state_graph(self, ExplodeBehavior(self), player)
 
     def update(self):
         super().update()
         if self.y > SCREENH:
             self.notify("remove") # todo: after removing from the scene, we still have a dangling notification to map_progress_event
 
-        if self.rotation == 360:
-            self.rotation = 0
-        else:
-            self.rotation += 1
-
     def render(self, screen):
         # overlay the base and the gun
         self.image = self.base_img.image.copy()
         gun_img = self.gun_img.rotated(self.rotation)
-        #self.gun_img.render(self.image)
         self.image.blit(gun_img, (self.gun_img.x, self.gun_img.y))
         super().render(screen)
 

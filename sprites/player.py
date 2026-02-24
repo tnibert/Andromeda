@@ -1,4 +1,4 @@
-from events import EVT_START_EXPLOSION, EVT_TIMEOUT
+from events import EVT_START_EXPLOSION, EVT_TIMEOUT, EVT_PLAYER_POSITION
 from sprite import Sprite
 from sprites.bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
@@ -10,6 +10,7 @@ from endgamesignal import EndLevel
 from statemachine import State, StateMachine
 from statemachines.defaultplayer import default_player_state_graph
 from timer import Timer
+from point2d import Point2D
 import pygame
 
 from typeset import TypeSet
@@ -94,6 +95,9 @@ class Player(Sprite):
         # [:] to iterate over copy of list (can remove from tick() Event handling)
         for mod in self.statmods[:]:
             mod.timer.tick()
+
+        # notify position change
+        self.notify(EVT_PLAYER_POSITION, center=Point2D(self.x+self.image.get_width()/2, self.y+self.image.get_height()/2))
 
     def fire(self, img, turret=UP):
         if turret == LEFT:

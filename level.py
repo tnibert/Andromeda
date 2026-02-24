@@ -80,7 +80,7 @@ class Level(Strategy):
             self.saucers.append(newsaucer)
             self.scene.attach(newsaucer)
 
-        turret = Turret(SCREENW/2, 0, turretimg, gunimg)
+        turret = Turret(SCREENW/2, 0, turretimg, gunimg, self.ship)
         self.game_map.subscribe(EVT_MAP_PROGRESS, turret.map_progress_event)
         self.scene.attach(turret)
 
