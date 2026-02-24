@@ -1,4 +1,4 @@
-from events import EVT_START_EXPLOSION, EVT_TIMEOUT, EVT_PLAYER_POSITION
+from events import EVT_START_EXPLOSION, EVT_TIMEOUT, EVT_PLAYER_POSITION, EVT_FIRE
 from sprite import Sprite
 from sprites.bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
@@ -107,7 +107,7 @@ class Player(Sprite):
         else:
             bullet = Bullet(self.x + (self.image.get_width() / 2), self.y - 10, img, UP, self)
 
-        self.notify("fire", bullet=bullet)
+        self.notify(EVT_FIRE, bullet=bullet)
 
     def stop_motion(self):
         """

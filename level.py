@@ -1,4 +1,4 @@
-from events import EVT_TIMEOUT, EVT_MAP_PROGRESS
+from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE
 from gamestrategy import Strategy
 from sprites.enemy import Enemy
 from sprites.turret import Turret
@@ -54,7 +54,7 @@ class Level(Strategy):
         Attach objects to scene and set up subscriptions
         """
         # clear relevant subscriptions on shared objects from previous levels
-        self.ship.remove_event("fire")
+        self.ship.remove_event(EVT_FIRE)
         self.ship.remove_event("player_respawn")
 
         # ensure ship is positioned correctly
@@ -64,7 +64,7 @@ class Level(Strategy):
         self.mixer.music.load(self.config["bg_music_fname"])
 
         # enable firing of bullets
-        self.ship.subscribe("fire", lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
+        self.ship.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
 
         # so that map speed up resets on player death
         self.ship.subscribe("player_respawn", self.game_map.reset_speed)
@@ -154,7 +154,7 @@ class Level(Strategy):
                                              self.config["boss_image"],
                                              self.ship)
             boss.subscribe("health_down", self.boss_health_label.update_value)
-            boss.subscribe("fire", lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
+            boss.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
             boss.subscribe("death", self.score_label.update_value)
             self.scene.attach(boss)
             self.scene.attach(self.boss_health_label)

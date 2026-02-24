@@ -1,4 +1,4 @@
-from events import EVT_TIMEOUT
+from events import EVT_TIMEOUT, EVT_FIRE
 from sprite import Sprite
 from sprites.bullet import Bullet
 from statemachines.magykalboss import magykal_boss_graph
@@ -199,7 +199,7 @@ class InvaderBossBehave(Boss):
         # todo: this is currently frame rate dependent
         if random.randrange(100) == 2:
             loc = random.randrange(len(self.bullet_start_locs))
-            self.notify("fire", bullet=bullet.Bullet(self.x + self.width/2 + self.bullet_start_locs[loc],
+            self.notify(EVT_FIRE, bullet=bullet.Bullet(self.x + self.width/2 + self.bullet_start_locs[loc],
                                                      self.y + self.height + bulletimg.get_height(),
                                                      bulletimg,
                                                      DOWN,
@@ -285,7 +285,7 @@ class MagykalBossBehave(Boss):
         elif self.mode == MOVE_MODE_FIRE:
             bullet_start_locs = [-10, 0, 10]
             for loc in bullet_start_locs:
-                self.notify("fire", bullet=bullet.Bullet(self.x + self.width/2 + loc,
+                self.notify(EVT_FIRE, bullet=bullet.Bullet(self.x + self.width/2 + loc,
                                                          self.y + self.height + bulletimg.get_height(),
                                                          bulletimg,
                                                          DOWN,
