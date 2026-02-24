@@ -5,7 +5,7 @@ from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION
 from statemachine import State, StateMachine
 from typeset import TypeSet
 
-def turret_state_graph(target, explosion_behavior: ExplodeBehavior, player) -> StateMachine:
+def turret_state_graph(target, player) -> StateMachine:
     initial = State(target,
                     TypeSet({
                         CollisionBehavior(target),
@@ -14,7 +14,7 @@ def turret_state_graph(target, explosion_behavior: ExplodeBehavior, player) -> S
                     name="initial")
 
     exploding = State(target,
-                      TypeSet({explosion_behavior}),
+                      TypeSet({ExplodeBehavior(target)}),
                       name="exploding")
 
     # todo: final state

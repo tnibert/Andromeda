@@ -17,7 +17,7 @@ class Turret(Sprite):
         self.gun_img = Sprite(gun_x, gun_y, gun_img)
 
         self.rotation = 0
-        self.state_machine = turret_state_graph(self, ExplodeBehavior(self), player)
+        self.state_machine = turret_state_graph(self, player)
 
     def update(self):
         super().update()
