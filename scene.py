@@ -33,6 +33,7 @@ class Scene:
     def remove(self, obj):
         """
         Remove a GameObject from the scene
+        todo: dangling references can be left in observables - e.g. map_progress_event
         :param obj:
         :return:
         """

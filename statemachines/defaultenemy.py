@@ -11,7 +11,7 @@ from statemachine import State, StateMachine
 from typeset import TypeSet
 
 
-def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> StateMachine:
+def default_enemy_state_graph(target) -> StateMachine:
     def respawn_proc():
         if target.exit_stage:
             target.notify("remove")
@@ -33,7 +33,7 @@ def default_enemy_state_graph(target, explosion_behavior: ExplodeBehavior) -> St
                     }), name="initial")
 
     exploding = State(target,
-                      TypeSet({explosion_behavior}), name="exploding")
+                      TypeSet({ExplodeBehavior(target)}), name="exploding")
 
     exit_scene = State(target,
                        TypeSet({

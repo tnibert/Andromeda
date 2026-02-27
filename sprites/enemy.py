@@ -16,8 +16,7 @@ class Enemy(Sprite):
         Sprite.__init__(self, random.randrange(0, SCREENW),  # x location
                         -3 * img.get_height(),  # y location
                         img)
-        explosion_behavior = ExplodeBehavior(self)
-        self.state_machine = default_enemy_state_graph(self, explosion_behavior)
+        self.state_machine = default_enemy_state_graph(self)
 
         self.exit_stage = False
 
@@ -43,10 +42,8 @@ class Enemy(Sprite):
     def on_collide(self, event):
         if event.kwargs.get("who") == self:
             if isinstance(event.source, Player):
-                #print("on_collide player")
                 self.notify(EVT_START_EXPLOSION)
             elif isinstance(event.source, Bullet):
-                #print("on_collide bullet")
                 self.notify(EVT_START_EXPLOSION)
                 event.source.notify("remove")
 

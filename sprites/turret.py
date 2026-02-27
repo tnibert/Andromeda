@@ -1,7 +1,10 @@
 from sprite import Sprite
+from sprites.bullet import Bullet
 from statemachines.turret import turret_state_graph
 from behaviors.explosion import ExplodeBehavior
 from constants import SCREENH, TURRET_DIMENSION
+from events import EVT_START_EXPLOSION
+
 
 class Turret(Sprite):
     """
@@ -19,20 +22,28 @@ class Turret(Sprite):
         self.rotation = 0
         self.state_machine = turret_state_graph(self, player)
 
+        self.base_render_mode = True
+
     def update(self):
         super().update()
-        if self.y > SCREENH:
-            self.notify("remove") # todo: after removing from the scene, we still have a dangling notification to map_progress_event
 
     def render(self, screen):
-        # overlay the base and the gun
-        self.image = self.base_img.image.copy()
-        gun_img = self.gun_img.rotated(self.rotation)
-        self.image.blit(gun_img, (self.gun_img.x, self.gun_img.y))
+        if self.base_render_mode:
+            # overlay the base and the gun
+            self.image = self.base_img.image.copy()
+            gun_img = self.gun_img.rotated(self.rotation)
+            self.image.blit(gun_img, (self.gun_img.x, self.gun_img.y))
         super().render(screen)
 
     def map_progress_event(self, event):
         self.y += event.kwargs.get("progress_change")
+
+    def on_collide(self, event):
+        if event.kwargs.get("who") == self and isinstance(event.source, Bullet) and event.source.origin is not self:
+            self.base_render_mode = False
+            print("bullet collided with turret")
+            self.notify(EVT_START_EXPLOSION)
+            event.source.notify("remove")
 
 def center_image_within(environment_img, inside_img):
     """
