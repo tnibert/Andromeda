@@ -49,6 +49,8 @@ class Level(Strategy):
 
         self.saucer_timer = Timer()
 
+        self.last_turret_pos = 0
+
     def setup(self):
         """
         Attach objects to scene and set up subscriptions
@@ -80,10 +82,7 @@ class Level(Strategy):
             self.saucers.append(newsaucer)
             self.scene.attach(newsaucer)
 
-        turret = Turret(SCREENW/2, 0, turretimg, gunimg, self.ship)
-        turret.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
-        self.game_map.subscribe(EVT_MAP_PROGRESS, turret.map_progress_event)
-        self.scene.attach(turret)
+        self.game_map.subscribe(EVT_MAP_PROGRESS, self.map_progress_event)        
 
         self.scene.attach(self.ship)
         self.scene.attach(self.game_map)
@@ -131,6 +130,15 @@ class Level(Strategy):
             info = e.args[0]
             info['score'] = self.score_label.get_value()
             raise EndLevel(info)
+
+    def map_progress_event(self, event):
+        if event.kwargs.get("total_progress") - self.last_turret_pos > SCREENH:
+            turret = Turret(random.randrange(0, SCREENW-TURRET_DIMENSION), -TURRET_DIMENSION, turretimg, gunimg, self.ship)
+            turret.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
+            self.game_map.subscribe(EVT_MAP_PROGRESS, turret.map_progress_event)
+            self.scene.attach(turret)
+            self.last_turret_pos = event.kwargs.get("total_progress")
+
 
     def remove_start_text(self, event):
         self.scene.remove(self.level_start_label)
