@@ -132,7 +132,7 @@ class Level(Strategy):
             raise EndLevel(info)
 
     def map_progress_event(self, event):
-        if event.kwargs.get("total_progress") - self.last_turret_pos > SCREENH:
+        if event.kwargs.get("total_progress") - self.last_turret_pos > SCREENH/2:
             turret = Turret(random.randrange(0, SCREENW-TURRET_DIMENSION), -TURRET_DIMENSION, turretimg, gunimg, self.ship)
             turret.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
             self.game_map.subscribe(EVT_MAP_PROGRESS, turret.map_progress_event)

@@ -4,7 +4,9 @@ from events import EVT_TIMEOUT, EVT_FIRE
 from sprites.bullet import Bullet
 import random
 
-class FireBehavior:
+FIRE_IVAL=1
+
+class TimedFireBehavior:
     def __init__(self, target):
         """
         todo: the trigger behavior needs to be made generic to apply this behavior to different sprites
@@ -13,7 +15,7 @@ class FireBehavior:
         self.target = target
         self.timer = Timer()
         self.timer.subscribe(EVT_TIMEOUT, self.fire_bullet)
-        self.timer.startwatch(random.randrange(1, 5))
+        self.timer.startwatch(FIRE_IVAL)
 
     def act(self):
         self.timer.tick()
@@ -22,4 +24,4 @@ class FireBehavior:
         print("fire bullet")
         bullet = Bullet(self.target.x, self.target.y, bulletimg, self.target.rotation, self.target)
         self.target.notify(EVT_FIRE, bullet=bullet)
-        self.timer.startwatch(random.randrange(1, 5))
+        self.timer.startwatch(FIRE_IVAL)
