@@ -3,9 +3,7 @@ from sprite import Sprite
 from sprites.bullet import Bullet
 from statemachines.magykalboss import magykal_boss_graph
 from timer import Timer
-from constants import BOSS_DEATH_SCORE_INC, BOSSHEALTH, NUM_BOSS_EXPLOSIONS, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
-from loadstaticres import blank, explosion
-from endgamesignal import EndLevel
+from constants import BOSSHEALTH, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
 from loadstaticres import bulletimg
 import random
 from sprites import bullet
@@ -36,7 +34,6 @@ RUSH_RECENTER = 4
 
 class Boss(Sprite):
     """
-    State machine for the boss behavior
     Allow for identification of bosses by one type and define base functionality.
     Combat strategies will differ.
     """
@@ -60,14 +57,6 @@ class Boss(Sprite):
         self.combat_state_timer = Timer()
         self.combat_state_change_time = 5
         self.combat_state_timer.subscribe(EVT_TIMEOUT, self.update_combat_mode)
-
-        # create boss explosions
-        self.boom = []
-        self.trigger_index = 0
-        for i in range(NUM_BOSS_EXPLOSIONS):
-            self.boom.append(Sprite(random.randrange(self.image.get_width() - explosion[0].get_width()),
-                                    random.randrange(self.image.get_height() - explosion[0].get_height()),
-                                    blank))
 
     def update_combat_mode(self, event):
         """
@@ -124,11 +113,6 @@ class Boss(Sprite):
             self.x -= self.speed * self.frame_tick
         elif self.dir == RIGHT:  # move right
             self.x += self.speed * self.frame_tick
-
-    def start_exploding(self):
-        self.exploding = True
-        self.image = self.image.copy()
-        self.boom[self.trigger_index].start_exploding()
 
     def on_collide(self, event):
         if isinstance(event.source, Bullet) \

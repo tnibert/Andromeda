@@ -1,4 +1,10 @@
-from constants import BOSS_DEATH_SCORE_INC
+import random
+
+from behaviors.explosion import ExplodeBehavior
+from constants import BOSS_DEATH_SCORE_INC, NUM_BOSS_EXPLOSIONS
+from events import EVT_EXPLOSION_FINISH, EVT_DEATH
+from loadstaticres import blank, explosion
+from sprite import Sprite
 
 
 class BossDeathBehavior:
@@ -7,27 +13,34 @@ class BossDeathBehavior:
         :param target:
         """
         self.target = target
+        self.boom = []
+
+        # oh the audacity
+        self.trigger_index = 0
+        def inc_trigger_index(event):
+            self.trigger_index += 1
+
+        for i in range(NUM_BOSS_EXPLOSIONS):
+            self.boom.append(
+                ExplodeBehavior(
+                    Sprite(
+                        random.randrange(self.target.image.get_width() - explosion[0].get_width()),
+                        random.randrange(self.target.image.get_height() - explosion[0].get_height()),
+                        blank
+                    )
+                )
+            )
+            self.boom[i].target.subscribe(EVT_EXPLOSION_FINISH, inc_trigger_index)
+
 
     def act(self):
-        if not self.target.exploding:
-            self.target.start_exploding()
-            self.target.notify("death", value=BOSS_DEATH_SCORE_INC)
-
-        for e in self.target.boom:
-            e.update()
-
-        # start next explosion if the previous is finished
-        if not self.target.boom[self.target.trigger_index].exploding and self.target.trigger_index < len(self.target.boom) - 1:
-            self.target.trigger_index += 1
-            self.target.boom[self.target.trigger_index].start_exploding()
+        try:
+            self.boom[self.trigger_index].act()
+        except IndexError:  # if the index is out of range, explosions are collectively finished
+            self.target.notify(EVT_DEATH, value=BOSS_DEATH_SCORE_INC)
 
         # render explosions onto boss
         # todo: make sections of boss transparent after explosions
         self.target.image = self.target.orig_image.copy()
-        for e in self.target.boom:
-            e.render(self.target.image)
-
-        # check if all explosions are finished
-        #if self.trigger_index == len(self.boom) - 1 and not self.boom[self.trigger_index].exploding:
-        #    self.game_state = BOSS_STATE_DEAD
-        #    self.exploding = False
+        for e in self.boom:
+            e.target.render(self.target.image)

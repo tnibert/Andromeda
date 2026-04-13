@@ -1,4 +1,4 @@
-from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE
+from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE, EVT_DEATH
 from gamestrategy import Strategy
 from sprites.enemy import Enemy
 from sprites.turret import Turret
@@ -164,7 +164,7 @@ class Level(Strategy):
                                              self.ship)
             boss.subscribe("health_down", self.boss_health_label.update_value)
             boss.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
-            boss.subscribe("death", self.score_label.update_value)
+            boss.subscribe(EVT_DEATH, self.score_label.update_value)
             self.scene.attach(boss)
             self.scene.attach(self.boss_health_label)
 
