@@ -32,7 +32,7 @@ class GameMap(GameObject):
         else:
             self.bgoffset += progress_change
 
-        if 2000 >= self.bgoffset > 2000 - SCREENH:
+        if VSCROLL_OFFSET >= self.bgoffset > VSCROLL_OFFSET - SCREENH:
             self.ychng += progress_change
             self.changeover = 1
 
@@ -41,9 +41,9 @@ class GameMap(GameObject):
     def render(self, screen):
         # for seamless vertical scrolling
         if self.changeover == 0:
-            screen.blit(self.image, (0, 0), (0, 2000 - SCREENH - self.bgoffset, SCREENW, 2000 - self.bgoffset))
+            screen.blit(self.image, (0, 0), (0, VSCROLL_OFFSET - SCREENH - self.bgoffset, SCREENW, VSCROLL_OFFSET - self.bgoffset))
         elif self.changeover == 1:
-            screen.blit(self.image, (0, 0), (0, self.image.get_height() - self.ychng, SCREENW, 2000))
+            screen.blit(self.image, (0, 0), (0, self.image.get_height() - self.ychng, SCREENW, VSCROLL_OFFSET))
             screen.blit(self.image, (0, self.ychng), (0, 0, SCREENW, SCREENH - self.ychng))
 
     def increase_speed(self, event):
