@@ -9,7 +9,8 @@ from timer import Timer
 from textelement import TextElement
 from endgamesignal import EndLevel
 from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg, turretimg, gunimg
-from constants import NEW_SAUCER_IVAL, SAUCER_THRESHOLD, SCREENW, SCREENH, VAL_TEXT_SIZE, BOSSHEALTH, VAL_X_LOC, VAL_FONT, VAL_Y_LOC_START, TEXTCOLOR, INITIAL_SAUCERS, LVL_START_FONT, LVL_START_TIME, TURRET_DIMENSION
+from constants import SCREENW, SCREENH, VAL_TEXT_SIZE, BOSSHEALTH, VAL_X_LOC, \
+    VAL_FONT, VAL_Y_LOC_START, TEXTCOLOR, LVL_START_FONT, LVL_START_TIME, TURRET_DIMENSION, SCROLLSPEED
 import random
 
 
@@ -45,11 +46,15 @@ class Level(Strategy):
 
         self.start_text_timer = Timer()
 
-        self.saucers = []
-
-        self.saucer_timer = Timer()
-
-        self.last_turret_pos = 0
+        # todo: separate function
+        self.enemy_entry_config = [
+            (SCROLLSPEED * 1, Enemy(self.config["enemy_image"])),
+            (SCROLLSPEED * 5, Enemy(self.config["enemy_image"])),
+            (SCROLLSPEED * 10, Enemy(self.config["enemy_image"])),
+            (SCROLLSPEED * 15, Turret(random.randrange(0, SCREENW-TURRET_DIMENSION), -TURRET_DIMENSION, turretimg, gunimg, self.ship)),
+            (SCROLLSPEED * 25, self.config["boss_class"](SCREENW / 2 - self.config["boss_image"].get_width() / 2, -1200, self.config["boss_image"], self.ship))
+        ]
+        self.enemy_entry_config.sort(key=lambda tup: tup[0])    # ensure ordered from earliest to latest
 
     def setup(self):
         """
@@ -65,23 +70,9 @@ class Level(Strategy):
         # load up music
         self.mixer.music.load(self.config["bg_music_fname"])
 
-        # enable firing of bullets
-        self.ship.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
-
-        # so that map speed up resets on player death
-        self.ship.subscribe("player_respawn", self.game_map.reset_speed)
-
-        self.saucer_timer.subscribe(EVT_TIMEOUT, self.add_saucer)
-
+        self.ship.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet"))) # enable firing of bullets
+        self.ship.subscribe("player_respawn", self.game_map.reset_speed) # so that map speed up resets on player death
         self.start_text_timer.subscribe(EVT_TIMEOUT, self.remove_start_text)
-
-        # create initial enemies
-        for x in range(0, INITIAL_SAUCERS):
-            newsaucer = Enemy(self.config["enemy_image"])
-            newsaucer.subscribe("score_up", self.score_label.update_value)
-            self.saucers.append(newsaucer)
-            self.scene.attach(newsaucer)
-
         self.game_map.subscribe(EVT_MAP_PROGRESS, self.map_progress_event)        
 
         self.scene.attach(self.ship)
@@ -90,7 +81,6 @@ class Level(Strategy):
         self.scene.attach(self.score_label)
         self.scene.attach(self.level_start_label)
 
-        self.saucer_timer.startwatch(NEW_SAUCER_IVAL)
         self.start_text_timer.startwatch(LVL_START_TIME)
 
     def run_game(self):
@@ -101,8 +91,6 @@ class Level(Strategy):
 
             if self.start_text_timer.is_timing():
                 self.start_text_timer.tick()
-
-            self.saucer_timer.tick()
 
             # determine if we should have a status modifier
             # so apparently there's no switch/case in python >_>
@@ -132,43 +120,24 @@ class Level(Strategy):
             raise EndLevel(info)
 
     def map_progress_event(self, event):
-        if event.kwargs.get("total_progress") - self.last_turret_pos > SCREENH/2:
-            turret = Turret(random.randrange(0, SCREENW-TURRET_DIMENSION), -TURRET_DIMENSION, turretimg, gunimg, self.ship)
-            turret.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
-            self.game_map.subscribe(EVT_MAP_PROGRESS, turret.map_progress_event)
-            self.scene.attach(turret)
-            self.last_turret_pos = event.kwargs.get("total_progress")
+        cur_progress = event.kwargs.get("total_progress")
+
+        if len(self.enemy_entry_config) > 0 and cur_progress > self.enemy_entry_config[0][0]:
+            print("in enemy add: {}".format(cur_progress))
+            scene_node = self.enemy_entry_config.pop(0)[1]
+
+            # tech debt: make this polymorphic
+            if type(scene_node) == Turret:
+                scene_node.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
+                self.game_map.subscribe(EVT_MAP_PROGRESS, scene_node.map_progress_event)
+            if type(scene_node) == self.config["boss_class"]:
+                scene_node.subscribe("health_down", self.boss_health_label.update_value)
+                scene_node.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
+                scene_node.subscribe(EVT_DEATH, self.score_label.update_value)
+                self.scene.attach(self.boss_health_label)
+
+            self.scene.attach(scene_node)
 
 
     def remove_start_text(self, event):
         self.scene.remove(self.level_start_label)
-
-    def add_saucer(self, event):
-        """
-        Event handler for saucer add timeout
-        :param event:
-        :return:
-        """
-        if len(self.saucers) < SAUCER_THRESHOLD:
-            newsaucer = Enemy(self.config["enemy_image"])
-            newsaucer.subscribe("score_up", self.score_label.update_value)
-            self.saucers.append(newsaucer)
-            self.scene.attach(newsaucer)
-            self.saucer_timer.startwatch(NEW_SAUCER_IVAL)
-        else:
-            # clear out the saucers and enter the boss
-            self.clear_saucers()
-            boss = self.config["boss_class"](SCREENW/2-self.config["boss_image"].get_width()/2,
-                                             -1200,
-                                             self.config["boss_image"],
-                                             self.ship)
-            boss.subscribe("health_down", self.boss_health_label.update_value)
-            boss.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
-            boss.subscribe(EVT_DEATH, self.score_label.update_value)
-            self.scene.attach(boss)
-            self.scene.attach(self.boss_health_label)
-
-    def clear_saucers(self):
-        for s in self.saucers:
-            s.leave()
-        self.saucers.clear()

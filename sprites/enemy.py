@@ -1,4 +1,3 @@
-from behaviors.explosion import ExplodeBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
 from events import EVT_START_EXPLOSION
 from sprite import Sprite
@@ -17,8 +16,6 @@ class Enemy(Sprite):
                         -3 * img.get_height(),  # y location
                         img)
         self.state_machine = default_enemy_state_graph(self)
-
-        self.exit_stage = False
 
     def update(self):
         super().update()
@@ -46,10 +43,3 @@ class Enemy(Sprite):
             elif isinstance(event.source, Bullet):
                 self.notify(EVT_START_EXPLOSION)
                 event.source.notify("remove")
-
-    def leave(self):
-        """
-        Set flag to leave the game scene on screen exit
-        :return:
-        """
-        self.exit_stage = True

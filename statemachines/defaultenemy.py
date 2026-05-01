@@ -2,29 +2,17 @@ import random
 
 from behaviors.collision import CollisionBehavior
 from behaviors.edgedetection import EdgeDetectionBehavior
-from behaviors.respawn import RespawnBehavior
 from behaviors.explosion import ExplodeBehavior
+from behaviors.sceneremove import SceneRemoveBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
-from constants import SCREENH, SCREENW
+from constants import SCREENH
 from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_RESPAWN_FINISH
 from statemachine import State, StateMachine
 from typeset import TypeSet
 
 
 def default_enemy_state_graph(target) -> StateMachine:
-    def respawn_proc():
-        if target.exit_stage:
-            target.notify("remove")
-
     # set up nodes
-    respawn = State(target,
-                    TypeSet({RespawnBehavior(target,
-                                             target.image,
-                                             lambda: random.randrange(0, SCREENW),
-                                             lambda: -3 * target.image.get_height(),
-                                             respawn_proc)}),
-                    name="respawn")
-
     initial = State(target,
                     TypeSet({
                         TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), target),
@@ -36,23 +24,17 @@ def default_enemy_state_graph(target) -> StateMachine:
                       TypeSet({ExplodeBehavior(target)}), name="exploding")
 
     exit_scene = State(target,
-                       TypeSet({
-                           TrajectoryMovementBehavior(180, random.randrange(60, 100), target)
-                       }), name="exit scene")
+                       TypeSet({SceneRemoveBehavior(target)}),
+                       name="exit_state")
 
     # set up edges
     initial.transitions = {
-        lambda t: t.y > SCREENH: respawn,
+        lambda t: t.y > SCREENH: exit_scene,
         EVT_START_EXPLOSION: exploding,
-        lambda t: t.exit_stage: exit_scene
     }
-    respawn.transitions = {
-        EVT_RESPAWN_FINISH: initial,
-        lambda t: t.exit_stage: exit_scene
-    }
+
     exploding.transitions = {
-        EVT_EXPLOSION_FINISH: respawn,
-        lambda t: t.exit_stage: exit_scene
+        EVT_EXPLOSION_FINISH: exit_scene,
     }
 
     state_machine = StateMachine(initial)
