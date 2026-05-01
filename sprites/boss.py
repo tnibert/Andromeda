@@ -11,20 +11,14 @@ from sprites import bullet
 This file defines all boss behaviors
 """
 
-# overarching boss states
-BOSS_STATE_ENTERING = 0
-BOSS_STATE_FIGHTING = 1
-BOSS_STATE_DYING = 2
-BOSS_STATE_DEAD = 3
-
-# combat states
+# enum combat states
 MOVE_MODE_STILL = 0
 MOVE_MODE_AIMLESS = 1
 MOVE_MODE_CHASING = 2
 MOVE_MODE_FIRE = 3
 MOVE_MODE_RUSH = 4
 
-# for rush attack
+# enum for rush attack
 RUSH_START = 0
 RUSH_DOWN = 1
 RUSH_SIDE = 2
@@ -127,14 +121,10 @@ class Boss(Sprite):
 class InvaderBossBehave(Boss):
     def __init__(self, x, y, img, foe):
         super().__init__(x, y, img, foe)
-
-        # combat move mode
-        self.mode = MOVE_MODE_STILL
-
+        self.state_machine = magykal_boss_graph(self)
+        self.mode = MOVE_MODE_STILL # combat move mode
         self.maxstep = 10
-
         self.alreadygoing = 0
-
         self.bullet_start_locs = [-1 * self.width/2, 0, self.width/2]
 
     def update_combat_mode(self, event):
@@ -152,7 +142,6 @@ class InvaderBossBehave(Boss):
         self.combat_state_timer.startwatch(self.combat_state_change_time)
 
     def combat_move(self):
-
         if self.mode == MOVE_MODE_STILL:
             return
 
@@ -215,14 +204,9 @@ class InvaderBossBehave(Boss):
 class MagykalBossBehave(Boss):
     def __init__(self, x, y, img, foe):
         super().__init__(x, y, img, foe)
-
         self.state_machine = magykal_boss_graph(self)
-
-        # combat move mode
-        self.mode = MOVE_MODE_STILL
-
+        self.mode = MOVE_MODE_STILL # combat move mode
         self.maxstep = 10
-
         self.rush_phase = RUSH_START
 
     def update_combat_mode(self, event):
@@ -241,7 +225,7 @@ class MagykalBossBehave(Boss):
 
     def combat_move(self):
         """
-        Handle movement while in BOSS_STATE_FIGHTING
+        Handle movement while in fighting state
         :return:
         """
 
