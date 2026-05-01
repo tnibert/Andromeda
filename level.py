@@ -1,4 +1,4 @@
-from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE, EVT_DEATH
+from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE, EVT_DEATH, EVT_SCORE_UP
 from gamestrategy import Strategy
 from sprites.enemy import Enemy
 from sprites.turret import Turret
@@ -128,6 +128,7 @@ class Level(Strategy):
 
             # tech debt: make this polymorphic
             if type(scene_node) == Turret:
+                scene_node.subscribe(EVT_SCORE_UP, self.score_label.update_value)
                 scene_node.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
                 self.game_map.subscribe(EVT_MAP_PROGRESS, scene_node.map_progress_event)
             if type(scene_node) == self.config["boss_class"]:
@@ -135,6 +136,8 @@ class Level(Strategy):
                 scene_node.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
                 scene_node.subscribe(EVT_DEATH, self.score_label.update_value)
                 self.scene.attach(self.boss_health_label)
+            if type(scene_node) == Enemy:
+                scene_node.subscribe(EVT_SCORE_UP, self.score_label.update_value)
 
             self.scene.attach(scene_node)
 

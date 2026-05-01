@@ -1,4 +1,3 @@
-from constants import SAUCER_DEATH_SCORE_INC
 from events import EVT_RESPAWN_FINISH
 
 
@@ -22,7 +21,6 @@ class RespawnBehavior:
             self.respawn_proc = lambda: None
 
     def act(self):
-        self.target.notify("score_up", value=SAUCER_DEATH_SCORE_INC)
         self.target.image = self.orig_image
         self.target.x = self.xproc()
         self.target.y = self.yproc()
