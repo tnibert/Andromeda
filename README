@@ -13,9 +13,6 @@ Space - shoot
 Arrow keys - move a given direction
 
 
-All of the following instructions are for Linux.  For Windows see README-Windows.txt.
-
-
 ** To install dependencies **
 
 $ pip3 install -r requirements.txt
@@ -51,13 +48,6 @@ $ make clean
 ** To run unit tests **
 
 $ make test
-
-** To compile on Windows **
-
-Run buildforwindows.bat (after running pip -r requirements.txt).
-You must have python 3.6 and mingw64 installed, both 64 bit.
-It should work with visual studio compiler, but hasn't been tested.
-You must manually adjust the paths to python and mingw at the beginning of the build script.
 
 ** Contribution Credits **
 
