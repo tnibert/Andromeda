@@ -19,8 +19,12 @@ def enemy_entry_config(enemy_image, ship, boss_class, boss_image):
         (SCROLLSPEED * 1, Enemy(enemy_image)),
         (SCROLLSPEED * 5, Enemy(enemy_image)),
         (SCROLLSPEED * 10, Enemy(enemy_image)),
+        (SCROLLSPEED * 15, Enemy(enemy_image)),
+        (SCROLLSPEED * 15, Enemy(enemy_image)),
         (SCROLLSPEED * 15,
-         Turret(random.randrange(0, SCREENW - TURRET_DIMENSION), -TURRET_DIMENSION, turretimg, gunimg, ship)),
+         Turret(40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
+        (SCROLLSPEED * 15,
+         Turret(SCREENW - TURRET_DIMENSION - 40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
         (SCROLLSPEED * 25, boss_class(SCREENW / 2 - boss_image.get_width() / 2, -1200, boss_image, ship))
     ]
     entry_config.sort(key=lambda tup: tup[0])  # ensure ordered from earliest to latest
@@ -127,7 +131,7 @@ class Level(Strategy):
     def map_progress_event(self, event):
         cur_progress = event.kwargs.get("total_progress")
 
-        if len(self.enemy_entry_config) > 0 and cur_progress > self.enemy_entry_config[0][0]:
+        while len(self.enemy_entry_config) > 0 and cur_progress > self.enemy_entry_config[0][0]:
             print("in enemy add: {}".format(cur_progress))
             scene_node = self.enemy_entry_config.pop(0)[1]
 
