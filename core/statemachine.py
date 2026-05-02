@@ -20,7 +20,7 @@ class State:
         self.behavior_attach_queue = []
         self.behavior_discard_queue = []
 
-    def transition(self) -> State:
+    def transition(self):
         for trigger, next_state in self.transitions.items():
             if callable(trigger) and trigger(self.target):
                 print("next state via trigger {}".format(next_state.name))
