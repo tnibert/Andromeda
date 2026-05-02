@@ -1,2 +1,6 @@
 __pycache__
 *~
+nuitka-crash-report.xml
+hiscore.txt
+.venv
+.idea
