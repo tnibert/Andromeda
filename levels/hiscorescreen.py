@@ -1,4 +1,4 @@
-from splashpage import SplashPage
+from levels.splashpage import SplashPage
 from constants import SCORE_FILE, SCREENH, LVL_START_FONT, TEXTCOLOR_WHITE, VAL_FONT, TEXTCOLOR, LEVEL_START_TEXT_SIZE
 from textelement import TextElement
 

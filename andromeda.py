@@ -10,15 +10,15 @@ pygame.init()
 
 from constants import SCREENW, SCREENH, PLAYERHEALTH, TEXTCOLOR, VAL_X_LOC, VAL_Y_LOC_START, VAL_TEXT_SIZE, VAL_FONT
 from loadstaticres import introscreen, shipimg
-from levelconfigs import level_configs
+from levels.levelconfigs import level_configs
 from scene import Scene
 from queue import Queue
-from level import Level
+from levels.level import Level
 from sprites.player import Player
 from textelement import TextElement
 from endgamesignal import EndLevel
-from splashpage import SplashPage
-from hiscorescreen import HiScoreScreen
+from levels.splashpage import SplashPage
+from levels.hiscorescreen import HiScoreScreen
 import sys
 
 TITLE = "Andromeda"
