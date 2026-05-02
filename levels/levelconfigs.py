@@ -28,12 +28,13 @@ def l1_enemy_config(ship):
 
 def l2_enemy_config(ship):
     saucer_img = pygame.image.load("assets/simple_level/saucer.png")
+    saucer_img2 = pygame.image.load("assets/magykal_level/saucer.png")
     boss_image = pygame.image.load("assets/simple_level/invader.png")
 
     entry_config = [
         (SCROLLSPEED * 10, Enemy(saucer_img)),
         (SCROLLSPEED * 15, Enemy(saucer_img)),
-        (SCROLLSPEED * 15, Enemy(saucer_img)),
+        (SCROLLSPEED * 15, Enemy(saucer_img2)),
         (SCROLLSPEED * 15,
          Turret(SCREENW/2 - TURRET_DIMENSION/2, -TURRET_DIMENSION, turretimg, gunimg, ship)),
         (SCROLLSPEED * 25, boss.InvaderBossBehave(SCREENW / 2 - boss_image.get_width() / 2, -1200, boss_image, ship))
