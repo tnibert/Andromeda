@@ -22,12 +22,13 @@ from hiscorescreen import HiScoreScreen
 import sys
 
 TITLE = "Andromeda"
+DISPLAY_MODE = pygame.DOUBLEBUF # alt: pygame.FULLSCREEN
 
 # queues for input events
 input_queue = Queue()
 
 # set up window
-screen = pygame.display.set_mode((SCREENW, SCREENH), pygame.DOUBLEBUF)
+screen = pygame.display.set_mode((SCREENW, SCREENH), DISPLAY_MODE)
 pygame.display.set_caption(TITLE)
 
 # objects which will be shared between levels
