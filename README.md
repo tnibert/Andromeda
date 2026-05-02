@@ -12,7 +12,8 @@ Arrow keys - move a given direction
 
 
 ## To install dependencies
-```$ pip3 install -r requirements.txt```
+Set up a virtual environment with:  
+```$ make venv```
 
 ## Running
 
@@ -20,6 +21,8 @@ Arrow keys - move a given direction
 ```
 $ git clone https://github.com/tnibert/andromeda/
 $ cd andromeda
+$ make venv
+$ source .venv/bin/activate
 $ python3 andromeda.py
 ```
 

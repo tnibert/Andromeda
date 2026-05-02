@@ -1,11 +1,15 @@
 all:
 	# chrpath package must be installed to build
-	python3 -m nuitka --show-progress --follow-imports --standalone andromeda.py
+	source .venv/bin/activate && python3 -m nuitka --show-progress --follow-imports --standalone andromeda.py
 	mv andromeda.dist andromeda-linux
 	cp -r assets/ andromeda-linux/
 	cp README andromeda-linux/
 
-zip:
+venv:
+	python3 -m venv .venv
+	source .venv/bin/activate && pip3 install -r requirements.txt
+
+zip: all
 	zip -r andromeda-linux.zip andromeda-linux/
 	sha1sum andromeda-linux.zip > andromeda-linux.zip.sha1
 
