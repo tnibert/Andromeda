@@ -1,9 +1,11 @@
-from events import EVT_TIMEOUT, EVT_FIRE
+from core.textelement import TextElement
+from events import EVT_TIMEOUT, EVT_FIRE, EVT_DEATH
 from core.sprite import Sprite
 from sprites.bullet import Bullet
 from statemachines.magykalboss import magykal_boss_graph
 from core.timer import Timer
-from constants import BOSSHEALTH, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
+from constants import BOSSHEALTH, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH, VAL_X_LOC, VAL_Y_LOC_START, \
+    VAL_TEXT_SIZE, VAL_FONT, TEXTCOLOR
 from loadstaticres import bulletimg
 import random
 from sprites import bullet
@@ -51,6 +53,9 @@ class Boss(Sprite):
         self.combat_state_timer = Timer()
         self.combat_state_change_time = 5
         self.combat_state_timer.subscribe(EVT_TIMEOUT, self.update_combat_mode)
+
+        self.boss_health_label = TextElement(VAL_X_LOC, VAL_Y_LOC_START + VAL_TEXT_SIZE * 2,
+                                             VAL_FONT, TEXTCOLOR, "Boss: {}", BOSSHEALTH)
 
     def update_combat_mode(self, event):
         """
@@ -117,6 +122,11 @@ class Boss(Sprite):
             self.notify("health_down", value=-1)
             event.source.notify("remove")
 
+    def pre_scene_attach(self, scene, score_label, game_map):
+        self.subscribe("health_down", self.boss_health_label.update_value)
+        self.subscribe(EVT_FIRE, lambda ev: scene.attach(ev.kwargs.get("bullet")))
+        self.subscribe(EVT_DEATH, score_label.update_value)
+        scene.attach(self.boss_health_label)
 
 class InvaderBossBehave(Boss):
     def __init__(self, x, y, img, foe):

@@ -1,5 +1,5 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
-from events import EVT_START_EXPLOSION
+from events import EVT_START_EXPLOSION, EVT_SCORE_UP
 from core.sprite import Sprite
 from constants import SCREENW, RIGHT, LEFT
 from sprites.player import Player
@@ -43,3 +43,6 @@ class Enemy(Sprite):
             elif isinstance(event.source, Bullet):
                 self.notify(EVT_START_EXPLOSION)
                 event.source.notify("remove")
+
+    def pre_scene_attach(self, scene, score_label, game_map):
+        self.subscribe(EVT_SCORE_UP, score_label.update_value)

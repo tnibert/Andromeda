@@ -1,5 +1,9 @@
 #! /usr/bin/env python3
 
+"""
+Entry point to the Andromeda engine.
+"""
+
 import pygame
 
 # setup audio mixer
@@ -52,7 +56,6 @@ for config in level_configs:
 # proceed through the levels
 # NB: setup() calls for SplashPage and HiScoreScreen are unnecessary
 while len(levels) > 0:
-
     # process and queue valid input
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

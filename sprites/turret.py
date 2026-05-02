@@ -1,7 +1,7 @@
 from core.sprite import Sprite
 from sprites.bullet import Bullet
 from statemachines.turret import turret_state_graph
-from events import EVT_START_EXPLOSION
+from events import EVT_START_EXPLOSION, EVT_MAP_PROGRESS, EVT_FIRE, EVT_SCORE_UP
 
 
 class Turret(Sprite):
@@ -42,6 +42,11 @@ class Turret(Sprite):
             print("bullet collided with turret")
             self.notify(EVT_START_EXPLOSION)
             event.source.notify("remove")
+
+    def pre_scene_attach(self, scene, score_label, game_map):
+        self.subscribe(EVT_SCORE_UP, score_label.update_value)
+        self.subscribe(EVT_FIRE, lambda ev: scene.attach(ev.kwargs.get("bullet")))
+        game_map.subscribe(EVT_MAP_PROGRESS, self.map_progress_event)
 
 def center_image_within(environment_img, inside_img):
     """

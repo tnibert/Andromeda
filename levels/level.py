@@ -1,34 +1,14 @@
-from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE, EVT_DEATH, EVT_SCORE_UP
+from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE
 from core.gamestrategy import Strategy
-from sprites.enemy import Enemy
-from sprites.turret import Turret
 from gamemap import GameMap
 from sprites.statusmodifiers import OneUp, Bomb, SpeedUp, MoreGuns
 from core.utilfuncs import switch
 from core.timer import Timer
 from core.textelement import TextElement
 from core.endgamesignal import EndLevel
-from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg, turretimg, gunimg
-from constants import SCREENW, SCREENH, VAL_TEXT_SIZE, BOSSHEALTH, VAL_X_LOC, \
-    VAL_FONT, VAL_Y_LOC_START, TEXTCOLOR, LVL_START_FONT, LVL_START_TIME, TURRET_DIMENSION, SCROLLSPEED
+from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg
+from constants import SCREENW, SCREENH, TEXTCOLOR, LVL_START_FONT, LVL_START_TIME
 import random
-
-
-def enemy_entry_config(enemy_image, ship, boss_class, boss_image):
-    entry_config = [
-        (SCROLLSPEED * 1, Enemy(enemy_image)),
-        (SCROLLSPEED * 5, Enemy(enemy_image)),
-        (SCROLLSPEED * 10, Enemy(enemy_image)),
-        (SCROLLSPEED * 15, Enemy(enemy_image)),
-        (SCROLLSPEED * 15, Enemy(enemy_image)),
-        (SCROLLSPEED * 15,
-         Turret(40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
-        (SCROLLSPEED * 15,
-         Turret(SCREENW - TURRET_DIMENSION - 40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
-        (SCROLLSPEED * 25, boss_class(SCREENW / 2 - boss_image.get_width() / 2, -1200, boss_image, ship))
-    ]
-    entry_config.sort(key=lambda tup: tup[0])  # ensure ordered from earliest to latest
-    return entry_config
 
 
 class Level(Strategy):
@@ -57,13 +37,11 @@ class Level(Strategy):
         # add health and score labels
         self.health_label = universal["health_label"]
         self.score_label = universal["score_label"]
-        self.boss_health_label = TextElement(VAL_X_LOC, VAL_Y_LOC_START+VAL_TEXT_SIZE*2,
-                                             VAL_FONT, TEXTCOLOR, "Boss: {}", BOSSHEALTH)
         self.level_start_label = TextElement(SCREENW/4, SCREENH/4, LVL_START_FONT, TEXTCOLOR, self.config["start_text"])
 
         self.start_text_timer = Timer()
 
-        self.enemy_entry_config = enemy_entry_config(self.config["enemy_image"], self.ship, self.config["boss_class"], self.config["boss_image"])
+        self.enemy_entry_config = self.config["enemy_config"](self.ship)
 
     def setup(self):
         """
@@ -135,21 +113,12 @@ class Level(Strategy):
             print("in enemy add: {}".format(cur_progress))
             scene_node = self.enemy_entry_config.pop(0)[1]
 
-            # tech debt: make this polymorphic
-            if type(scene_node) == Turret:
-                scene_node.subscribe(EVT_SCORE_UP, self.score_label.update_value)
-                scene_node.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
-                self.game_map.subscribe(EVT_MAP_PROGRESS, scene_node.map_progress_event)
-            if type(scene_node) == self.config["boss_class"]:
-                scene_node.subscribe("health_down", self.boss_health_label.update_value)
-                scene_node.subscribe(EVT_FIRE, lambda ev: self.scene.attach(ev.kwargs.get("bullet")))
-                scene_node.subscribe(EVT_DEATH, self.score_label.update_value)
-                self.scene.attach(self.boss_health_label)
-            if type(scene_node) == Enemy:
-                scene_node.subscribe(EVT_SCORE_UP, self.score_label.update_value)
+            if hasattr(scene_node, "pre_scene_attach"):
+                scene_node.pre_scene_attach(self.scene, self.score_label, self.game_map)
+            else:
+                print("scene_node lacks attribute pre_scene_attach: {}", type(scene_node))
 
             self.scene.attach(scene_node)
-
 
     def remove_start_text(self, event):
         self.scene.remove(self.level_start_label)
