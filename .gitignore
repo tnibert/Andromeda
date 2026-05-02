@@ -4,3 +4,5 @@ nuitka-crash-report.xml
 hiscore.txt
 .venv
 .idea
+andromeda.build
+andromeda-linux/
