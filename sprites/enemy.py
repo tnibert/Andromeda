@@ -6,16 +6,13 @@ from sprites.player import Player
 from sprites.bullet import Bullet
 import random
 
-from statemachines.defaultenemy import default_enemy_state_graph
 from core.typeset import NoElementPresent
 
 
 class Enemy(Sprite):
-    def __init__(self, img):
-        Sprite.__init__(self, random.randrange(0, SCREENW),  # x location
-                        -3 * img.get_height(),  # y location
-                        img)
-        self.state_machine = default_enemy_state_graph(self)
+    def __init__(self, img, initial_x, state_graph_fn):
+        Sprite.__init__(self, initial_x, -3 * img.get_height(), img)
+        self.state_machine = state_graph_fn(self)
 
     def update(self):
         super().update()
