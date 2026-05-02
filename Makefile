@@ -3,7 +3,7 @@ all:
 	source .venv/bin/activate && python3 -m nuitka --show-progress --follow-imports --standalone andromeda.py
 	mv andromeda.dist andromeda-linux
 	cp -r assets/ andromeda-linux/
-	cp README andromeda-linux/
+	cp README.md andromeda-linux/
 
 venv:
 	python3 -m venv .venv

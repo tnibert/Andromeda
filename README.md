@@ -30,7 +30,7 @@ $ python3 andromeda.py
 ```
 $ unzip andromeda-linux.zip
 $ cd andromeda-linux
-$ ./andromeda
+$ ./andromeda.bin
 ```
 
 ## Compilation
