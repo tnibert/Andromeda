@@ -23,3 +23,6 @@ clean:
 	rm -rf andromeda-linux/
 	rm -f andromeda-linux.zip
 	rm -f andromeda-linux.zip.sha1
+
+run:
+	source .venv/bin/activate && ./andromeda.py
