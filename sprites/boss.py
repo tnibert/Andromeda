@@ -1,8 +1,8 @@
 from events import EVT_TIMEOUT, EVT_FIRE
-from sprite import Sprite
+from core.sprite import Sprite
 from sprites.bullet import Bullet
 from statemachines.magykalboss import magykal_boss_graph
-from timer import Timer
+from core.timer import Timer
 from constants import BOSSHEALTH, UP, DOWN, LEFT, RIGHT, BOSS_SPEED, SCREENW, SCREENH
 from loadstaticres import bulletimg
 import random

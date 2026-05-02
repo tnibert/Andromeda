@@ -1,13 +1,13 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
 from events import EVT_START_EXPLOSION
-from sprite import Sprite
+from core.sprite import Sprite
 from constants import SCREENW, RIGHT, LEFT
 from sprites.player import Player
 from sprites.bullet import Bullet
 import random
 
 from statemachines.defaultenemy import default_enemy_state_graph
-from typeset import NoElementPresent
+from core.typeset import NoElementPresent
 
 
 class Enemy(Sprite):

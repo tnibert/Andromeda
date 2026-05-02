@@ -1,5 +1,5 @@
-from statemachine import State
-from typeset import TypeSet
+from core.statemachine import State
+from core.typeset import TypeSet
 
 
 class TestTarget:

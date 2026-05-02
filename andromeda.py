@@ -11,12 +11,12 @@ pygame.init()
 from constants import SCREENW, SCREENH, PLAYERHEALTH, TEXTCOLOR, VAL_X_LOC, VAL_Y_LOC_START, VAL_TEXT_SIZE, VAL_FONT
 from loadstaticres import introscreen, shipimg
 from levels.levelconfigs import level_configs
-from scene import Scene
+from core.scene import Scene
 from queue import Queue
 from levels.level import Level
 from sprites.player import Player
-from textelement import TextElement
-from endgamesignal import EndLevel
+from core.textelement import TextElement
+from core.endgamesignal import EndLevel
 from levels.splashpage import SplashPage
 from levels.hiscorescreen import HiScoreScreen
 import sys

@@ -1,7 +1,7 @@
-from observe import Observable
+from core.observe import Observable
 from constants import GAMEOBJ_LAYER
-from statemachine import State, StateMachine
-from typeset import TypeSet
+from core.statemachine import State, StateMachine
+from core.typeset import TypeSet
 
 
 class GameObject(Observable):

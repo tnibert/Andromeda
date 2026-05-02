@@ -1,4 +1,4 @@
-from timer import Timer
+from core.timer import Timer
 from loadstaticres import bulletimg
 from events import EVT_TIMEOUT, EVT_FIRE
 from sprites.bullet import Bullet

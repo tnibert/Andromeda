@@ -1,8 +1,8 @@
 from behaviors.explosion import ExplodeBehavior
 from behaviors.respawn import RespawnBehavior
 from events import EVT_EXPLOSION_FINISH, EVT_RESPAWN_FINISH, EVT_START_EXPLOSION
-from statemachine import StateMachine, State
-from typeset import TypeSet
+from core.statemachine import StateMachine, State
+from core.typeset import TypeSet
 
 
 def default_player_state_graph(target, explosion_behavior: ExplodeBehavior) -> StateMachine:

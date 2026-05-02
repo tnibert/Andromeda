@@ -1,5 +1,5 @@
 from events import EVT_TIMEOUT, EVT_MAP_PROGRESS
-from gameobject import GameObject
+from core.gameobject import GameObject
 from constants import SCREENH, SCREENW, SCROLLSPEED, MAXSCROLLSPEED, MAP_LAYER
 from sprites.player import Player
 

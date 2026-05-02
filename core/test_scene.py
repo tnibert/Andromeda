@@ -1,10 +1,10 @@
 import pygame
 pygame.init()
-
-from scene import Scene
-from sprite import Sprite
-from loadstaticres import shipimg
 import pytest
+
+from core.scene import Scene
+from core.sprite import Sprite
+from loadstaticres import shipimg
 
 
 class MockScreen:

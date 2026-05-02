@@ -1,4 +1,4 @@
-from endgamesignal import EndLevel
+from core.endgamesignal import EndLevel
 
 
 class EndLevelBehavior:

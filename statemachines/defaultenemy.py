@@ -8,8 +8,8 @@ from behaviors.scoreup import ScoreUpBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
 from constants import SCREENH
 from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_RESPAWN_FINISH, EVT_SCORE_UP
-from statemachine import State, StateMachine
-from typeset import TypeSet
+from core.statemachine import State, StateMachine
+from core.typeset import TypeSet
 
 
 def default_enemy_state_graph(target) -> StateMachine:

@@ -1,13 +1,11 @@
 import pygame
+pygame.init()
+import time
 
 from events import EVT_TIMEOUT
-
-pygame.init()
-
 from loadstaticres import shipimg
-from timer import Timer
-from test_scene import MockGameObj
-import time
+from core.timer import Timer
+from core.test_scene import MockGameObj
 
 
 def test_tick():

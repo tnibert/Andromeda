@@ -1,4 +1,4 @@
-from utilfuncs import toframes
+from core.utilfuncs import toframes
 from constants import TURRET_DIMENSION
 import pygame
 

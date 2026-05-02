@@ -1,5 +1,5 @@
-from observe import Event
-from typeset import TypeSet
+from core.observe import Event
+from core.typeset import TypeSet
 
 
 class State:

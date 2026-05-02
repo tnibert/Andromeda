@@ -1,8 +1,6 @@
-from sprite import Sprite
+from core.sprite import Sprite
 from sprites.bullet import Bullet
 from statemachines.turret import turret_state_graph
-from behaviors.explosion import ExplodeBehavior
-from constants import SCREENH, TURRET_DIMENSION
 from events import EVT_START_EXPLOSION
 
 

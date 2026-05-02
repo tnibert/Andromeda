@@ -3,8 +3,8 @@ from behaviors.boss.bossdeathbehavior import BossDeathBehavior
 from behaviors.boss.endlevelbehavior import EndLevelBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
 from events import EVT_DEATH
-from statemachine import StateMachine, State
-from typeset import TypeSet
+from core.statemachine import StateMachine, State
+from core.typeset import TypeSet
 
 
 def magykal_boss_graph(target) -> StateMachine:

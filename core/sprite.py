@@ -1,4 +1,4 @@
-from gameobject import GameObject
+from core.gameobject import GameObject
 from properties import PROP_COLLISION
 
 import pygame

@@ -5,8 +5,8 @@ from behaviors.trackingrotation import TrackingRotationBehavior
 from behaviors.fire import TimedFireBehavior
 from behaviors.sceneremove import SceneRemoveBehavior
 from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_SCORE_UP
-from statemachine import State, StateMachine
-from typeset import TypeSet
+from core.statemachine import State, StateMachine
+from core.typeset import TypeSet
 from constants import SCREENH
 
 def turret_state_graph(target, player) -> StateMachine:

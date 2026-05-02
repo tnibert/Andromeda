@@ -1,13 +1,13 @@
 from events import EVT_TIMEOUT, EVT_MAP_PROGRESS, EVT_FIRE, EVT_DEATH, EVT_SCORE_UP
-from gamestrategy import Strategy
+from core.gamestrategy import Strategy
 from sprites.enemy import Enemy
 from sprites.turret import Turret
 from gamemap import GameMap
 from sprites.statusmodifiers import OneUp, Bomb, SpeedUp, MoreGuns
-from utilfuncs import switch
-from timer import Timer
-from textelement import TextElement
-from endgamesignal import EndLevel
+from core.utilfuncs import switch
+from core.timer import Timer
+from core.textelement import TextElement
+from core.endgamesignal import EndLevel
 from loadstaticres import oneupimg, moregunsimg, speedupimg, bombimg, turretimg, gunimg
 from constants import SCREENW, SCREENH, VAL_TEXT_SIZE, BOSSHEALTH, VAL_X_LOC, \
     VAL_FONT, VAL_Y_LOC_START, TEXTCOLOR, LVL_START_FONT, LVL_START_TIME, TURRET_DIMENSION, SCROLLSPEED

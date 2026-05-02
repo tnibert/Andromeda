@@ -2,7 +2,7 @@ import pygame
 pygame.init()
 
 from behaviors.trajectory import TrajectoryMovementBehavior
-from gameobject import GameObject
+from core.gameobject import GameObject
 
 
 # todo: game object should not require image, should only be relevant for sprite

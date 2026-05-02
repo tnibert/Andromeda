@@ -1,11 +1,10 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
-from sprite import Sprite
+from core.sprite import Sprite
 from constants import SCREENW, SCREENH, STATMOD_DURATION, PLAYERSPEED, PLAYERMAXSPEED, STATMOD_SPEED
-from statemachine import State, StateMachine
-from timer import Timer
+from core.statemachine import State, StateMachine
+from core.timer import Timer
+from core.typeset import TypeSet
 import random
-
-from typeset import TypeSet
 
 
 # todo: handling of timers with acquisition of multiple power ups in player and gamemap

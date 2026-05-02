@@ -1,19 +1,15 @@
 from events import EVT_START_EXPLOSION, EVT_TIMEOUT, EVT_PLAYER_POSITION, EVT_FIRE
-from sprite import Sprite
+from core.sprite import Sprite
 from sprites.bullet import Bullet
 from constants import SCREENW, SCREENH, PLAYERHEALTH, UP, LEFT, RIGHT, PLAYERSPEED
 from sprites.statusmodifiers import StatusModifier, TimeableStatmod
 from behaviors.explosion import ExplodeBehavior
 from loadstaticres import bulletimg
 from sprites.boss import Boss
-from endgamesignal import EndLevel
-from statemachine import State, StateMachine
+from core.endgamesignal import EndLevel
 from statemachines.defaultplayer import default_player_state_graph
-from timer import Timer
-from point2d import Point2D
+from core.point2d import Point2D
 import pygame
-
-from typeset import TypeSet
 
 OFF_SCREEN = -2000
 

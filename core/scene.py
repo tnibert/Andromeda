@@ -1,6 +1,6 @@
 from properties import PROP_COLLISION
-from utilfuncs import collide
-from timer import Timer
+from core.utilfuncs import collide
+from core.timer import Timer
 from constants import BLACK
 
 

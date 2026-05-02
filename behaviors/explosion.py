@@ -1,8 +1,8 @@
 from constants import EXPLOSION_FRAME_UPDATE_WAIT
 from events import EVT_TIMEOUT, EVT_EXPLOSION_FINISH
 from loadstaticres import explosion
-from observe import Observable
-from timer import Timer
+from core.observe import Observable
+from core.timer import Timer
 
 class ExplodeBehavior(Observable):
     """

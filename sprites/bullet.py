@@ -1,9 +1,8 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
-from sprite import Sprite
-from constants import UP, BULLETSPEED, SCREENH
-from sprites import boss
-from statemachine import State, StateMachine
-from typeset import TypeSet
+from core.sprite import Sprite
+from constants import BULLETSPEED, SCREENH
+from core.statemachine import State, StateMachine
+from core.typeset import TypeSet
 
 
 class Bullet(Sprite):
@@ -26,16 +25,3 @@ class Bullet(Sprite):
 
     def on_collide(self, event):
         pass
-        # if isinstance(event.source, boss.Boss) \
-        #         and event.kwargs.get("who") is self \
-        #         and not self.exploding \
-        #         and self.origin is not event.source:
-        #     self.start_exploding()
-        #     self.x = self.x - self.image.get_width()/2
-        #     self.y = self.y - self.image.get_height()/2
-        #
-        #     # best to not divide actions between boss and bullet
-        #     # any scenario where the bullet explodes should be handled in this function
-        #     if event.source.health > 0:
-        #         event.source.health -= 1
-        #         event.source.notify("health_down", value=-1)

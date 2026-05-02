@@ -1,7 +1,7 @@
-from gamestrategy import Strategy
-from gameobject import GameObject
+from core.gamestrategy import Strategy
+from core.gameobject import GameObject
 from constants import SCREENH
-from endgamesignal import EndLevel
+from core.endgamesignal import EndLevel
 
 
 class SplashPage(Strategy):

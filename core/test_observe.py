@@ -1,4 +1,4 @@
-from observe import Observable
+from core.observe import Observable
 import pytest
 
 

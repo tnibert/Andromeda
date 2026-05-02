@@ -4,7 +4,7 @@ from behaviors.explosion import ExplodeBehavior
 from constants import BOSS_DEATH_SCORE_INC, NUM_BOSS_EXPLOSIONS
 from events import EVT_EXPLOSION_FINISH, EVT_DEATH
 from loadstaticres import blank, explosion
-from sprite import Sprite
+from core.sprite import Sprite
 
 
 class BossDeathBehavior:
