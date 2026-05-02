@@ -4,14 +4,21 @@ import time
 
 
 class Timer(Observable):
+    """
+    todo: use monotonic clock
+    """
     def __init__(self, owner=None):
         """
 
         :param owner: An optional Observable to send the timeout event from
         """
         Observable.__init__(self)
+
         # for general tick
-        self.prevtime = time.time()
+        # this must be initialized on the first tick
+        # otherwise, the first tick diff will be the time between init and scene attachment
+        self.prevtime = None
+
         # for stopwatch timing
         self.start = None
         self.threshold = None
@@ -37,6 +44,10 @@ class Timer(Observable):
         return self.start is not None and self.threshold is not None
 
     def tick(self):
+        # if this is the first tick, initialize the last tick
+        if self.prevtime is None:
+            self.prevtime = time.time()
+
         curtime = time.time()
 
         diff = curtime - self.prevtime
