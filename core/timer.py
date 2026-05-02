@@ -5,7 +5,8 @@ import time
 
 class Timer(Observable):
     """
-    todo: use monotonic clock
+    Source for timing events for game objects.
+    Facilitates both regular tick and requested timeouts.
     """
     def __init__(self, owner=None):
         """
@@ -28,7 +29,7 @@ class Timer(Observable):
             self.owner = self
 
     def startwatch(self, seconds):
-        self.start = time.time()
+        self.start = time.monotonic()
         self.threshold = seconds
 
     def stopwatch(self):
@@ -46,9 +47,9 @@ class Timer(Observable):
     def tick(self):
         # if this is the first tick, initialize the last tick
         if self.prevtime is None:
-            self.prevtime = time.time()
+            self.prevtime = time.monotonic()
 
-        curtime = time.time()
+        curtime = time.monotonic()
 
         diff = curtime - self.prevtime
         self.prevtime = curtime
