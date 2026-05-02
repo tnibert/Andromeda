@@ -14,6 +14,19 @@ from constants import SCREENW, SCREENH, VAL_TEXT_SIZE, BOSSHEALTH, VAL_X_LOC, \
 import random
 
 
+def enemy_entry_config(enemy_image, ship, boss_class, boss_image):
+    entry_config = [
+        (SCROLLSPEED * 1, Enemy(enemy_image)),
+        (SCROLLSPEED * 5, Enemy(enemy_image)),
+        (SCROLLSPEED * 10, Enemy(enemy_image)),
+        (SCROLLSPEED * 15,
+         Turret(random.randrange(0, SCREENW - TURRET_DIMENSION), -TURRET_DIMENSION, turretimg, gunimg, ship)),
+        (SCROLLSPEED * 25, boss_class(SCREENW / 2 - boss_image.get_width() / 2, -1200, boss_image, ship))
+    ]
+    entry_config.sort(key=lambda tup: tup[0])  # ensure ordered from earliest to latest
+    return entry_config
+
+
 class Level(Strategy):
     """
     Strategy for managing progression of typical game level
@@ -46,15 +59,7 @@ class Level(Strategy):
 
         self.start_text_timer = Timer()
 
-        # todo: separate function
-        self.enemy_entry_config = [
-            (SCROLLSPEED * 1, Enemy(self.config["enemy_image"])),
-            (SCROLLSPEED * 5, Enemy(self.config["enemy_image"])),
-            (SCROLLSPEED * 10, Enemy(self.config["enemy_image"])),
-            (SCROLLSPEED * 15, Turret(random.randrange(0, SCREENW-TURRET_DIMENSION), -TURRET_DIMENSION, turretimg, gunimg, self.ship)),
-            (SCROLLSPEED * 25, self.config["boss_class"](SCREENW / 2 - self.config["boss_image"].get_width() / 2, -1200, self.config["boss_image"], self.ship))
-        ]
-        self.enemy_entry_config.sort(key=lambda tup: tup[0])    # ensure ordered from earliest to latest
+        self.enemy_entry_config = enemy_entry_config(self.config["enemy_image"], self.ship, self.config["boss_class"], self.config["boss_image"])
 
     def setup(self):
         """
