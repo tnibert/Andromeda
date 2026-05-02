@@ -1,3 +1,4 @@
+from events import EVT_TICK
 from properties import PROP_COLLISION
 from core.utilfuncs import collide
 from core.timer import Timer
@@ -19,7 +20,7 @@ class Scene:
         obj.subscribe("remove", self.receive_signals)
 
         # subscribe to timer for obtaining time between frames
-        self.clock.subscribe("tick", obj.on_tick)
+        self.clock.subscribe(EVT_TICK, obj.on_tick)
 
         # enable collision handling
         for child in self.children:
@@ -37,7 +38,7 @@ class Scene:
         :param obj:
         :return:
         """
-        self.clock.unsubscribe("tick", obj.on_tick)
+        self.clock.unsubscribe(EVT_TICK, obj.on_tick)
 
         self.children.remove(obj)
 
