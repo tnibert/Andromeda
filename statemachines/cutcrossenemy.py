@@ -1,13 +1,11 @@
-
 import random
 
 from behaviors.collision import CollisionBehavior
-from behaviors.edgedetection import EdgeDetectionBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.sceneremove import SceneRemoveBehavior
 from behaviors.scoreup import ScoreUpBehavior
 from behaviors.trajectory import TrajectoryMovementBehavior
-from constants import SCREENH
+from constants import SCREENH, LEFT, DOWN
 from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_RESPAWN_FINISH, EVT_SCORE_UP
 from core.statemachine import State, StateMachine
 from core.typeset import TypeSet
@@ -25,15 +23,13 @@ def cut_cross_enemy_state_graph(target) -> StateMachine:
     # set up nodes
     down = State(target,
                     TypeSet({
-                        TrajectoryMovementBehavior(180, random.randrange(60, 100), target),
-                        #EdgeDetectionBehavior(target.change_direction, target),
+                        TrajectoryMovementBehavior(DOWN, random.randrange(60, 100), target),
                         CollisionBehavior(target),
                     }), name="down")
 
     left = State(target,
                     TypeSet({
-                        TrajectoryMovementBehavior(90, random.randrange(60, 100), target),
-                        #EdgeDetectionBehavior(target.change_direction, target),
+                        TrajectoryMovementBehavior(LEFT, random.randrange(60, 100), target),
                         CollisionBehavior(target),
                     }), name="left")
 
@@ -58,6 +54,7 @@ def cut_cross_enemy_state_graph(target) -> StateMachine:
 
     left.transitions = {
         lambda t: t.x <= 100: down,
+        EVT_START_EXPLOSION: exploding,
     }
 
     exploding.transitions = {
