@@ -16,20 +16,21 @@ Set up a virtual environment with:
 ```$ make venv```
 
 ## Running
+Note that the code does not include assets.  You must download the asset pack and extract it in 
+the same directory as `andromeda.py` or `andromeda.bin`.
 
 ### Run from source
 ```
-$ git clone https://github.com/tnibert/andromeda/
-$ cd andromeda
+$ unzip assets.zip
 $ make venv
-$ source .venv/bin/activate
-$ python3 andromeda.py
+$ make run
 ```
 
 ### Run from binary
 ```
 $ unzip andromeda-linux.zip
 $ cd andromeda-linux
+$ unzip assets.zip
 $ ./andromeda.bin
 ```
 

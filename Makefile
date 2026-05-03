@@ -2,7 +2,6 @@ all:
 	# chrpath package must be installed to build
 	source .venv/bin/activate && python3 -m nuitka --show-progress --follow-imports --standalone andromeda.py
 	mv andromeda.dist andromeda-linux
-	cp -r assets/ andromeda-linux/
 	cp README.md andromeda-linux/
 
 venv:
@@ -12,6 +11,10 @@ venv:
 zip: all
 	zip -r andromeda-linux.zip andromeda-linux/
 	sha1sum andromeda-linux.zip > andromeda-linux.zip.sha1
+
+assetpack:
+	zip -r assets.zip assets/
+	sha1sum assets.zip > assets.zip.sha1
 
 test:
 	chmod +x runtests.sh
@@ -23,6 +26,8 @@ clean:
 	rm -rf andromeda-linux/
 	rm -f andromeda-linux.zip
 	rm -f andromeda-linux.zip.sha1
+	rm -f assets.zip
+	rm -f assets.zip.sha1
 
 run:
 	source .venv/bin/activate && ./andromeda.py
