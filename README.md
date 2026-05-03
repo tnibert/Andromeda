@@ -16,8 +16,17 @@ Set up a virtual environment with:
 ```$ make venv```
 
 ## Running
-Note that the code does not include assets.  You must download the asset pack and extract it in 
-the same directory as `andromeda.py` or `andromeda.bin`.
+
+### Retrieval of asset pack
+Note that the code does not include assets.  You must download the asset pack (found at
+https://github.com/tnibert/Andromeda/releases/) and extract it in the same directory as `andromeda.py`
+or `andromeda.bin`.
+
+#### Example retrieval:
+```
+$ wget https://github.com/tnibert/Andromeda/releases/download/initial-asset-pack/assets.zip
+$ wget https://github.com/tnibert/Andromeda/releases/download/initial-asset-pack/assets.zip.sha1
+```
 
 ### Run from source
 ```
