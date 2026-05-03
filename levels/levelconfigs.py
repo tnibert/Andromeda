@@ -13,16 +13,46 @@ from statemachines.defaultenemy import default_enemy_state_graph
 def l1_enemy_config(ship):
     # todo: enemy factory?
     entry_config = [
-        (SCROLLSPEED * 1, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 1, Enemy(surf_alien, SCREENW/2, default_enemy_state_graph)),
         (SCROLLSPEED * 5, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 10, Enemy(surf_alien, SCREENW - 80, cut_cross_enemy_state_graph)),
+
+        # three in a row follow each other
+        (SCROLLSPEED * 10, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 11, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 12, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+
         (SCROLLSPEED * 15, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 15, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 100, cut_cross_enemy_state_graph)),
+
+        # turrets at same vertical level together
         (SCROLLSPEED * 15,
          Turret(40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
         (SCROLLSPEED * 15,
          Turret(SCREENW - TURRET_DIMENSION - 40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
+
+        # centered turret
+        (SCROLLSPEED * 20,
+         Turret(SCREENW / 2 - TURRET_DIMENSION / 2, -TURRET_DIMENSION, turretimg, gunimg, ship)),
+
+        (SCROLLSPEED * 21, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 21, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 21, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+
+        (SCROLLSPEED * 23, Enemy(lantern_saucer_img, SCREENW - 200, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 24, Enemy(lantern_saucer_img, SCREENW - 200, cut_cross_enemy_state_graph)),
+
         (SCROLLSPEED * 25,
+         Turret(40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
+        (SCROLLSPEED * 25,
+         Turret(SCREENW - TURRET_DIMENSION - 40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
+
+        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+
+        # boss
+        (SCROLLSPEED * 35,
          boss.MagykalBossBehave(SCREENW / 2 - magykal_boss_img.get_width() / 2, -1200, magykal_boss_img, ship))
     ]
     entry_config.sort(key=lambda tup: tup[0])  # ensure ordered from earliest to latest
@@ -33,8 +63,11 @@ def l2_enemy_config(ship):
         (SCROLLSPEED * 10, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
         (SCROLLSPEED * 15, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
         (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+
+        # centered turret
         (SCROLLSPEED * 15,
          Turret(SCREENW/2 - TURRET_DIMENSION/2, -TURRET_DIMENSION, turretimg, gunimg, ship)),
+
         (SCROLLSPEED * 25,
          boss.InvaderBossBehave(SCREENW / 2 - invader_boss_image.get_width() / 2, -1200, invader_boss_image, ship))
     ]

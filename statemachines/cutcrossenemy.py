@@ -11,6 +11,8 @@ from core.statemachine import State, StateMachine
 from core.typeset import TypeSet
 
 
+SPEED = 100
+
 def cut_cross_enemy_state_graph(target) -> StateMachine:
     """
     Moves like:
@@ -23,13 +25,14 @@ def cut_cross_enemy_state_graph(target) -> StateMachine:
     # set up nodes
     down = State(target,
                     TypeSet({
-                        TrajectoryMovementBehavior(DOWN, random.randrange(60, 100), target),
+                        TrajectoryMovementBehavior(DOWN, SPEED, target),
                         CollisionBehavior(target),
                     }), name="down")
 
+    # todo: capability to cut either direction
     left = State(target,
                     TypeSet({
-                        TrajectoryMovementBehavior(LEFT, random.randrange(60, 100), target),
+                        TrajectoryMovementBehavior(LEFT, SPEED, target),
                         CollisionBehavior(target),
                     }), name="left")
 
