@@ -13,7 +13,7 @@ class MockScreen:
 
 class MockGameObj(Sprite):
     def __init__(self, x, y, img):
-        super().__init__(x, y, 0, img)
+        super().__init__(x, y, img)
         self.testlist = []
 
     def on_collide(self, event):
