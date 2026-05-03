@@ -1,7 +1,7 @@
 from behaviors.trajectory import TrajectoryMovementBehavior
 from events import EVT_START_EXPLOSION, EVT_SCORE_UP
 from core.sprite import Sprite
-from constants import SCREENW, RIGHT, LEFT
+from constants import RIGHT, LEFT
 from sprites.player import Player
 from sprites.bullet import Bullet
 import random
@@ -17,6 +17,7 @@ class Enemy(Sprite):
     def update(self):
         super().update()
 
+    # todo: make this function part of the default enemy state machine
     def change_direction(self, direction):
         try:
             movement = self.state_machine.current_state.behaviors.retrieve_instance(TrajectoryMovementBehavior)
