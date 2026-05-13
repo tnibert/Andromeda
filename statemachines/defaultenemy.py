@@ -1,6 +1,7 @@
 import random
 
 from behaviors.collision import CollisionBehavior
+from behaviors.curve import CurveMovementBehavior
 from behaviors.edgedetection import EdgeDetectionBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.sceneremove import SceneRemoveBehavior
@@ -10,16 +11,40 @@ from constants import SCREENH
 from events import EVT_EXPLOSION_FINISH, EVT_START_EXPLOSION, EVT_RESPAWN_FINISH, EVT_SCORE_UP
 from core.statemachine import State, StateMachine
 from core.typeset import TypeSet
+from statemachines.cutcrossenemy import cut_cross_enemy_state_graph
+
+# enums for enemy configurations
+TRAJECTORY=0
+CUTCROSS=1
+CURVE=2
 
 
-def default_enemy_state_graph(target) -> StateMachine:
+class EnumNotPresent(Exception):
+    pass
+
+
+def enemy_config_factory(config):
+    """
+    Map enemy configuration enums to functions creating the desired state graph.
+    :param config: enum as defined above
+    :return: a callable which returns the desired state graph
+    """
+    if config == TRAJECTORY:
+        return lambda target: default_enemy_state_graph(target,
+                        TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), target),
+                        EdgeDetectionBehavior(target.change_direction, target))
+    elif config == CUTCROSS:
+        return lambda target: cut_cross_enemy_state_graph(target)
+    elif config == CURVE:
+        return lambda target: default_enemy_state_graph(target, CurveMovementBehavior(350, target))
+
+    raise EnumNotPresent()
+
+
+def default_enemy_state_graph(target, *args) -> StateMachine:
     # set up nodes
     initial = State(target,
-                    TypeSet({
-                        TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), target),
-                        EdgeDetectionBehavior(target.change_direction, target),
-                        CollisionBehavior(target),
-                    }), name="initial")
+                    TypeSet(args + (CollisionBehavior(target),)), name="initial")
 
     exploding = State(target,
                       TypeSet({ExplodeBehavior(target)}),

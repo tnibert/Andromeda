@@ -1,5 +1,3 @@
-import random
-
 from behaviors.collision import CollisionBehavior
 from behaviors.explosion import ExplodeBehavior
 from behaviors.sceneremove import SceneRemoveBehavior

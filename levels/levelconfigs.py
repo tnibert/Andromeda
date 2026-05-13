@@ -6,25 +6,23 @@ from loadstaticres import turretimg, gunimg, invader_boss_image, surf_alien, lan
 from sprites import boss
 from sprites.enemy import Enemy
 from sprites.turret import Turret
-from statemachines.curveenemy import curve_enemy_state_graph
-from statemachines.cutcrossenemy import cut_cross_enemy_state_graph
-from statemachines.defaultenemy import default_enemy_state_graph
+from statemachines.defaultenemy import TRAJECTORY, CURVE, CUTCROSS, enemy_config_factory
 
 
 def l1_enemy_config(ship):
     # todo: enemy factory?
     entry_config = [
-        (SCROLLSPEED * 1, Enemy(surf_alien, SCREENW/2, default_enemy_state_graph)),
-        (SCROLLSPEED * 5, Enemy(surf_alien, random.randrange(0, SCREENW), curve_enemy_state_graph)),
+        (SCROLLSPEED * 1, Enemy(surf_alien, SCREENW/2, enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 5, Enemy(surf_alien, random.randrange(0, SCREENW), enemy_config_factory(CURVE))),
 
         # three in a row follow each other
-        (SCROLLSPEED * 10, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
-        (SCROLLSPEED * 11, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
-        (SCROLLSPEED * 12, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 10, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
+        (SCROLLSPEED * 11, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
+        (SCROLLSPEED * 12, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
 
-        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 15, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 100, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 15, Enemy(simple_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 100, enemy_config_factory(CUTCROSS))),
 
         # turrets at same vertical level together
         (SCROLLSPEED * 15,
@@ -36,21 +34,21 @@ def l1_enemy_config(ship):
         (SCROLLSPEED * 20,
          Turret(SCREENW / 2 - TURRET_DIMENSION / 2, -TURRET_DIMENSION, turretimg, gunimg, ship)),
 
-        (SCROLLSPEED * 21, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 21, Enemy(simple_saucer_img, random.randrange(0, SCREENW), curve_enemy_state_graph)),
-        (SCROLLSPEED * 21, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 21, Enemy(surf_alien, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 21, Enemy(simple_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(CURVE))),
+        (SCROLLSPEED * 21, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
 
-        (SCROLLSPEED * 23, Enemy(lantern_saucer_img, SCREENW - 200, cut_cross_enemy_state_graph)),
-        (SCROLLSPEED * 24, Enemy(lantern_saucer_img, SCREENW - 200, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 23, Enemy(lantern_saucer_img, SCREENW - 200, enemy_config_factory(CUTCROSS))),
+        (SCROLLSPEED * 24, Enemy(lantern_saucer_img, SCREENW - 200, enemy_config_factory(CUTCROSS))),
 
         (SCROLLSPEED * 25,
          Turret(40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
         (SCROLLSPEED * 25,
          Turret(SCREENW - TURRET_DIMENSION - 40, -TURRET_DIMENSION, turretimg, gunimg, ship)),
 
-        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), curve_enemy_state_graph)),
+        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(CURVE))),
 
         # boss
         (SCROLLSPEED * 35,
@@ -61,9 +59,9 @@ def l1_enemy_config(ship):
 
 def l2_enemy_config(ship):
     entry_config = [
-        (SCROLLSPEED * 10, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 15, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 10, Enemy(simple_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 15, Enemy(simple_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
 
         # centered turret
         (SCROLLSPEED * 15,
@@ -77,9 +75,9 @@ def l2_enemy_config(ship):
 
 def l3_enemy_config(ship):
     entry_config = [
-        (SCROLLSPEED * 10, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 15, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
+        (SCROLLSPEED * 10, Enemy(surf_alien, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 15, Enemy(surf_alien, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
         (SCROLLSPEED * 15,
          Turret(SCREENW / 2 - TURRET_DIMENSION / 2, -TURRET_DIMENSION, turretimg, gunimg, ship)),
         (SCROLLSPEED * 25,
