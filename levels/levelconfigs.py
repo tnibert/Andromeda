@@ -6,6 +6,7 @@ from loadstaticres import turretimg, gunimg, invader_boss_image, surf_alien, lan
 from sprites import boss
 from sprites.enemy import Enemy
 from sprites.turret import Turret
+from statemachines.curveenemy import curve_enemy_state_graph
 from statemachines.cutcrossenemy import cut_cross_enemy_state_graph
 from statemachines.defaultenemy import default_enemy_state_graph
 
@@ -14,7 +15,7 @@ def l1_enemy_config(ship):
     # todo: enemy factory?
     entry_config = [
         (SCROLLSPEED * 1, Enemy(surf_alien, SCREENW/2, default_enemy_state_graph)),
-        (SCROLLSPEED * 5, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 5, Enemy(surf_alien, random.randrange(0, SCREENW), curve_enemy_state_graph)),
 
         # three in a row follow each other
         (SCROLLSPEED * 10, Enemy(lantern_saucer_img, SCREENW - 80, cut_cross_enemy_state_graph)),
@@ -36,7 +37,7 @@ def l1_enemy_config(ship):
          Turret(SCREENW / 2 - TURRET_DIMENSION / 2, -TURRET_DIMENSION, turretimg, gunimg, ship)),
 
         (SCROLLSPEED * 21, Enemy(surf_alien, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 21, Enemy(simple_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 21, Enemy(simple_saucer_img, random.randrange(0, SCREENW), curve_enemy_state_graph)),
         (SCROLLSPEED * 21, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
 
         (SCROLLSPEED * 23, Enemy(lantern_saucer_img, SCREENW - 200, cut_cross_enemy_state_graph)),
@@ -49,7 +50,7 @@ def l1_enemy_config(ship):
 
         (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
         (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
-        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), default_enemy_state_graph)),
+        (SCROLLSPEED * 30, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), curve_enemy_state_graph)),
 
         # boss
         (SCROLLSPEED * 35,
