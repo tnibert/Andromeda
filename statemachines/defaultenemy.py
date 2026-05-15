@@ -31,7 +31,7 @@ def enemy_config_factory(config):
     """
     if config == TRAJECTORY:
         return lambda target: default_enemy_state_graph(target,
-                        TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(60, 100), target),
+                        TrajectoryMovementBehavior(random.randrange(100, 260), random.randrange(100, 140), target),
                         EdgeDetectionBehavior(target.change_direction, target))
     elif config == CUTCROSS:
         return lambda target: cut_cross_enemy_state_graph(target)

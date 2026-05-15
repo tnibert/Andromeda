@@ -12,15 +12,17 @@ from statemachines.defaultenemy import TRAJECTORY, CURVE, CUTCROSS, enemy_config
 def l1_enemy_config(ship):
     # todo: enemy factory?
     entry_config = [
-        (SCROLLSPEED * 1, Enemy(surf_alien, SCREENW/2, enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 1, Enemy(simple_saucer_img, SCREENW/2, enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 3, Enemy(simple_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
         (SCROLLSPEED * 5, Enemy(surf_alien, random.randrange(0, SCREENW), enemy_config_factory(CURVE))),
+        (SCROLLSPEED * 7, Enemy(simple_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
 
         # three in a row follow each other
         (SCROLLSPEED * 10, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
         (SCROLLSPEED * 11, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
         (SCROLLSPEED * 12, Enemy(lantern_saucer_img, SCREENW - 80, enemy_config_factory(CUTCROSS))),
 
-        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
+        (SCROLLSPEED * 15, Enemy(lantern_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(CURVE))),
         (SCROLLSPEED * 15, Enemy(simple_saucer_img, random.randrange(0, SCREENW), enemy_config_factory(TRAJECTORY))),
         (SCROLLSPEED * 15, Enemy(lantern_saucer_img, SCREENW - 100, enemy_config_factory(CUTCROSS))),
 
